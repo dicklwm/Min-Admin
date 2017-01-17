@@ -17,16 +17,13 @@
 ###开发及构建
 ####快速开始
 1. 克隆项目文件:
-> git clone git@github.com:zuiidea/antd-admin.git
-
+ > git clone git@github.com:zuiidea/antd-admin.git
 2. 安装全局的dva-cli
-> npm i dva-cli -g
-
+ > npm i dva-cli -g
 3. 进入目录安装依赖:
-> npm i
- 
+ > npm i 
 4. 开发
-> npm start  打开http://localhost:8000
+ > npm start  打开http://localhost:8000
  
 ###参考
 > Antd-admin：https://github.com/zuiidea/antd-admin
