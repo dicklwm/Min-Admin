@@ -1,5 +1,12 @@
 {
   "entry": "src/index.js",
+  "proxy": {
+    "/api": {
+      "target": "http://www.mitarl.com:8080/webapi",
+      "changeOrigin": true,
+      "pathRewrite": { "^/api" : "" }
+    }
+  },
   "env": {
     "development": {
       "extraBabelPlugins": [
@@ -15,6 +22,5 @@
       ]
     }
   },
-  "theme": "src/theme.js",
-
+  "theme": "src/theme.js"
 }

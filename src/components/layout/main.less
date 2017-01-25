@@ -17,6 +17,7 @@
       .logo {
         img {
           width: 28px;
+          height:28px;
           margin: 6px 7px;
         }
       }
@@ -68,7 +69,7 @@
     height: 100vh;
     transition: @transition-ease-out;
     box-shadow: @shadow-1;
-    z-index: 1994;
+    z-index: 1000;
     color: #999;
 
     &.light {
@@ -91,7 +92,7 @@
 
       img {
         width: 40px;
-        height:40px;
+        height: 40px;
         margin-right: 8px;
         transition: @transition-ease-out;
         border-radius: 50%;
@@ -109,17 +110,17 @@
       }
     }
 
-    .siderMenu {
-      position: absolute;
-      width: 100%;
-      max-height: ~"calc(100% - 88px)";
-      overflow-y: scroll;
-      overflow-x: hidden;
-
-      &::-webkit-scrollbar-thumb {
-        display: none;
-      }
-    }
+    //.siderMenu {
+    //  position: absolute;
+    //  width: 100%;
+    //  max-height: ~"calc(100% - 88px)";
+    //  overflow-y: scroll;
+    //  overflow-x: hidden;
+    //
+    //  &::-webkit-scrollbar-thumb {
+    //    display: none;
+    //  }
+    //}
 
     .switchtheme {
       width: 100%;
@@ -194,8 +195,8 @@
   }
 
   .bread {
-    height: 64px;
-    line-height: 64px;
+    height: 40px;
+    line-height: 40px;
     padding: 0 24px;
     margin-bottom: -24px;
   }
@@ -209,17 +210,32 @@
     .container {
       margin: 24px;
 
+      //没有bread，626px
       .content {
-        min-height: e("calc(100vh - 184px)");
+        min-height: e("calc(100vh - 143px)");
         position: relative;
 
         :global .content-inner {
           background: #fff;
           padding: 24px;
           box-shadow: @shadow-1;
-          min-height: e("calc(100vh - 184px)");
+          min-height: e("calc(100vh - 143px)");
         }
       }
+
+      //有，610px
+      .content.hasBread {
+        min-height: e("calc(100vh - 159px)");
+        position: relative;
+
+        :global .content-inner {
+          background: #fff;
+          padding: 24px;
+          box-shadow: @shadow-1;
+          min-height: e("calc(100vh - 159px)");
+        }
+      }
+
     }
   }
 
@@ -289,7 +305,7 @@
 
 .popovermenu {
   width: 280px;
-  left: 12px!important;
+  left: 12px !important;
 
   :global .ant-popover-inner-content {
     padding: 0;

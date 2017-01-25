@@ -38,7 +38,7 @@ function Login ({ form, loading ,onOk}) {
 
               <Form vertical>
                 <FormItem>
-                  {getFieldDecorator('userName', {
+                  {getFieldDecorator('account', {
                     rules: [{ required: true, message: '请输入账号' }],
                   })(
                     <Input size="large" addonBefore={<Icon type="user"/>} placeholder="账号"/>

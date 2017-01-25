@@ -37,7 +37,7 @@ function Header ({ user, siderFold, isNavbar, menuPopoverVisible, location, swit
                  title={
                    <span>
                      <Icon type='user'/>
-                     {user.name}
+                     {user.accountName}
                    </span>
                  }
         >

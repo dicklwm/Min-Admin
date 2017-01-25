@@ -1,5 +1,6 @@
 import * as appServices from '../services/app';
 import config from '../utils/config';
+import { notification } from 'antd';
 
 export default {
   namespace: 'app',
@@ -10,7 +11,45 @@ export default {
     darkTheme: localStorage.getItem('antdAdminDarkTheme')!=='false',
     isNavbar: document.body.clientWidth < 769,
     user: {
-      name: 'guest'
+      accountId: 'guest',
+      accountName: 'guest',
+    },
+  },
+  effects: {
+    *login ({ payload }, { call, put }) {
+      const res = yield call(appServices.login, payload);
+      const data = res.data;
+      if (data.success) {
+        yield put({
+          type: 'loginSuccess',
+          payload: {
+            user: {
+              accountId: data.data.accountId,
+              accountName: data.data.accountName,
+            }
+          }
+        })
+      } else {
+        notification.error({ message: '账号密码有误！', description: res.data.msg });
+      }
+    },
+
+    *logout ({ payload }, { call, put }) {
+      const res = yield call(appServices.logout, payload);
+      console.log(res);
+      if (res.data.success) {
+        yield put({
+          type: 'logoutSuccess'
+        })
+      }
+    },
+
+    *changeNavbar ({}, { put }) {
+      if (document.body.clientWidth < 769) {
+        yield put({ type: 'showNavbar' })
+      } else {
+        yield put({ type: 'hideNavbar' })
+      }
     },
   },
   reducers: {
@@ -30,11 +69,15 @@ export default {
     logoutSuccess (state) {
       return {
         ...state,
-        login: false
+        login: false,
+        user: {
+          accountId: 'guest',
+          accountName: 'guest',
+        }
       }
     },
 
-    handleSwitchSider (state) {
+    switchSider (state) {
       localStorage.setItem('antdAdminSiderFold', !state.siderFold)
       return {
         ...state,
@@ -42,7 +85,7 @@ export default {
       }
     },
 
-    handleChangeTheme (state) {
+    changeTheme (state) {
       localStorage.setItem('antdAdminDarkTheme', !state.darkTheme)
       return {
         ...state,
@@ -62,64 +105,11 @@ export default {
         isNavbar: false
       }
     },
-    handleSwitchMenuPopver (state) {
+    switchMenuPopver (state) {
       return {
         ...state,
         menuPopoverVisible: !state.menuPopoverVisible
       }
-    }
-  },
-  effects: {
-    *login ({ payload }, { call, put }) {
-      console.log(payload);
-      const data = yield call(appServices.login, payload);
-      if (data.data.success) {
-        yield put({
-          type: 'loginSuccess',
-          payload: {
-            user: {
-              name: payload.userName
-            }
-          }
-        })
-      } else {
-        yield put({
-          type: 'loginFail'
-        })
-      }
-    },
-
-    *logout ({ payload }, { call, put }) {
-      const data = yield call(appServices.logout, payload);
-      console.log(data);
-      if (data.data.success) {
-        yield put({
-          type: 'logoutSuccess'
-        })
-      }
-    },
-
-    *switchSider ({}, { put }) {
-      yield put({
-        type: 'handleSwitchSider'
-      })
-    },
-    *changeTheme ({}, { put }) {
-      yield put({
-        type: 'handleChangeTheme'
-      })
-    },
-    *changeNavbar ({}, { put }) {
-      if (document.body.clientWidth < 769) {
-        yield put({ type: 'showNavbar' })
-      } else {
-        yield put({ type: 'hideNavbar' })
-      }
-    },
-    *switchMenuPopver ({}, { put }) {
-      yield put({
-        type: 'handleSwitchMenuPopver'
-      })
     }
   },
   subscriptions: {

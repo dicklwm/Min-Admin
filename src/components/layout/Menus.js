@@ -5,6 +5,7 @@ import menu from '../../utils/menu';
 import config from '../../utils/config';
 
 const topMenus = menu.map(item => item.key);
+const SubMenu = Menu.SubMenu;
 
 /**
  * 递归生成菜单配置文件的所有菜单，包括子菜单
@@ -16,7 +17,7 @@ const getMenus = function (menuArray, siderFold, parentPath = '/') {
   return menuArray.map(item => {
     if (item.child) {
       return (
-        <Menu.SubMenu
+        <SubMenu
           key={item.key}
           title={
             <span>
@@ -26,7 +27,7 @@ const getMenus = function (menuArray, siderFold, parentPath = '/') {
           }
         >
           {getMenus(item.child, siderFold, parentPath + item.key + '/')}
-        </Menu.SubMenu>
+        </SubMenu>
       )
     } else {
       return (
@@ -41,7 +42,7 @@ const getMenus = function (menuArray, siderFold, parentPath = '/') {
   })
 }
 
-function Menus ({ siderFold, darkTheme, location, isNavbar, handleClickNavMenu, className }) {
+function Menus ({ siderFold, darkTheme, location, handleClickNavMenu, className }) {
   const menuItems = getMenus(menu, siderFold);
   return (
     <Menu
@@ -49,7 +50,7 @@ function Menus ({ siderFold, darkTheme, location, isNavbar, handleClickNavMenu, 
       mode={siderFold ? 'vertical' : 'inline'}
       theme={darkTheme ? 'dark' : 'light'}
       onClick={handleClickNavMenu}
-      defaultOpenKeys={isNavbar ? menuItems.map(item => item.key) : []}
+      defaultOpenKeys={ [location.pathname.split('/')[1]] }
       defaultSelectedKeys={[location.pathname.split('/')[location.pathname.split('/').length - 1] || config.defaultSelectMenu]}
     >
       {menuItems}

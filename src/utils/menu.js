@@ -6,20 +6,29 @@ module.exports = [
   },
   {
     key: 'inventory',
-    name: 'UI组件',
-    icon: 'camera-o',
+    name: '库存管理',
+    icon: 'inbox',
     clickable: false,
     child: [
       {
-        key: 'ico',
-        name: 'Ico 图标'
+        key: 'matter',
+        name: '物料主文件'
       },
-      {
-        key: 'search',
-        name: 'Search 搜索'
-      }
     ]
   },
+  {
+    key: 'workflow',
+    name: '流程管理',
+    icon: 'book',
+    clickable: false,
+    child: [
+      {
+        key: 'definition',
+        name: '流程定义'
+      },
+    ]
+  },
+
   {
     key: 'navigation',
     name: '测试导航',

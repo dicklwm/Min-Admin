@@ -4,6 +4,7 @@ import Index from '../components/layout/Index';
 import Login from '../components/Login/Login';
 import '../components/layout/common.less';
 
+
 function App ({ children, location, dispatch, loading, app }) {
   const { login, user, siderFold, darkTheme, isNavbar, menuPopoverVisible } = app
 
@@ -17,7 +18,13 @@ function App ({ children, location, dispatch, loading, app }) {
       dispatch({ type: 'app/switchMenuPopver' })
     },
     logout () {
-      dispatch({ type: 'app/logout' })
+      dispatch({
+        type: 'app/logout',
+        payload: {
+          accountId: app.user.accountId,
+          accountId: app.user.accountName
+        }
+      })
     },
     switchSider () {
       dispatch({ type: 'app/switchSider' })
@@ -43,8 +50,8 @@ function App ({ children, location, dispatch, loading, app }) {
             darkTheme={darkTheme}
             siderFold={siderFold}
             isNavbar={isNavbar}
-            location={location}
             children={children}
+            location={location}
           />
           :
           <Login

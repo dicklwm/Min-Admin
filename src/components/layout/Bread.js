@@ -2,10 +2,10 @@ import React, { PropTypes } from 'react';
 import { Breadcrumb, Icon } from 'antd';
 import styles from './main.less';
 import menu  from '../../utils/menu';
+import config from '../../utils/config';
 
 let pathSet = []
-const getPathSet = function (menuArray, parentPath) {
-  parentPath = parentPath || '/'
+const getPathSet = function (menuArray, parentPath = '/') {
   menuArray.map(item => {
     pathSet[(parentPath + item.key).replace(/\//g, '-').hyphenToHump()] = {
       path: parentPath + item.key,
@@ -30,11 +30,17 @@ function Bread ({ location }) {
       pathNames.push(('-' + item).hyphenToHump())
     }
   })
+
+  console.log(location,pathNames);
+
   const breads = pathNames.map((item, key) => {
     //判断是否默认打开的主页
     if (!(item in pathSet)) {
-      item = 'Dashboard'
+      item = ('-' + config.defaultSelectMenu).hyphenToHump();
     }
+
+    console.log(item, pathSet, pathSet[item]);
+
     return (
       <Breadcrumb.Item
         key={key}
@@ -53,9 +59,6 @@ function Bread ({ location }) {
   return (
     <div className={styles.bread}>
       <Breadcrumb>
-        <Breadcrumb.Item href='#/'><Icon type='home'/>
-          <span>主页</span>
-        </Breadcrumb.Item>
         {breads}
       </Breadcrumb>
     </div>

@@ -17,7 +17,7 @@ function Asider ({ siderFold, darkTheme, location, changeTheme }) {
         <img className={styles.logoImage} src={config.logoSrc}/>
         {siderFold ? '' : <span>{config.logoText}</span>}
       </div>
-      <Menus {...menusProps} className={styles.siderMenu}/>
+      <Menus {...menusProps}/>
       {
         !siderFold ?
           <div className={styles.switchtheme}>

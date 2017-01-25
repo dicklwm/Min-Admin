@@ -1,14 +1,16 @@
 import React from 'react';
 import classnames from 'classnames';
 import Asider from './Asider';
-import Bread from './Bread';
 import Header from './Header';
 import Footer from './Footer';
+import Bread from './Bread';
+
+import config from '../../utils/config';
 
 //CSS
 import styles from './main.less';
 
-function Index ({ isNavbar, siderFold, darkTheme, siderProps, headerProps, location, children }) {
+function Index ({ isNavbar, siderFold, darkTheme, siderProps, headerProps, children, location }) {
 
   const layoutClass = classnames(
     styles.layout,
@@ -21,6 +23,11 @@ function Index ({ isNavbar, siderFold, darkTheme, siderProps, headerProps, locat
     { [styles.light]: !darkTheme }
   );
 
+  const contentClass = classnames(
+    styles.content,
+    { [styles.hasBread]: config.needBread }
+  )
+
   return (
     <div className={layoutClass}>
       {!isNavbar ?
@@ -29,13 +36,13 @@ function Index ({ isNavbar, siderFold, darkTheme, siderProps, headerProps, locat
         </aside> : ''}
       <div className={styles.main}>
         <Header {...headerProps} />
-        <Bread location={location}/>
+        {config.needBread ? <Bread location={location}/> : ''}
         <div className={styles.container}>
-          <div className={styles.content}>
+          <div className={contentClass} id="content">
             {children}
           </div>
         </div>
-        <Footer />
+        {config.needFooter ? <Footer /> : ''}
       </div>
     </div>
   );
