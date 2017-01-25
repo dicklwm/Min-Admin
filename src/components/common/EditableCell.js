@@ -108,9 +108,6 @@ class EditableCell extends React.Component {
   shouldComponentUpdate (nextProps, nextState) {
     const { dataIndex, index } = this.props;
     const nextEditable = nextProps.editable[dataIndex]===index;
-    console.log(index, dataIndex, nextEditable!==this.state.editable ||
-      nextState.value!==this.state.value
-    );
     return nextEditable!==this.state.editable ||
       nextState.value!==this.state.value;
   }

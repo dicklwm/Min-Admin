@@ -16,7 +16,7 @@ function RouterConfig ({ history, app }) {
       name: name,
       getComponent(nextState, cb){
         require.ensure([], require => {
-          if (needModel && !app._models.some(val => (val.namespace===name)))
+          if (needModel && !app._models.some(val => (val.namespace===url)))
             app.model(require('./models/' + url))
 
           cb(null, require('./routes/' + url));

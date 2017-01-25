@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import Iframe from '../../components/Iframe';
+import Iframe from '../../components/common/Iframe';
 import {v3Address} from '../../utils/config';
 
 /**

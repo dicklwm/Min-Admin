@@ -1,7 +1,9 @@
 import React from 'react';
-import { Table, Button, Popconfirm } from 'antd';
-// import { makeColumns, makeColumn } from '../../../utils/func';
+import { Table, Button, Popconfirm, Popover, Select, Checkbox } from 'antd';
 import EditableCell from '../../common/EditableCell';
+import styles from './MatterTable.css';
+
+const Option = Select.Option;
 
 class MatterTable extends React.Component {
 
@@ -14,7 +16,7 @@ class MatterTable extends React.Component {
       [
         {
           title: '物料编码', dataIndex: 'ITEM', key: 'ITEM', width: 180,
-          sorter: (a, b) => a['ITEM'].charCodeAt(0) - b['ITEM'].charCodeAt(0),
+          sorter: ({ ITEM:a }, { ITEM:b }) => a ? a.localeCompare(b) : -1,
           render: (text, record, index) => (
             <EditableCell
               dataType='string'
@@ -28,7 +30,7 @@ class MatterTable extends React.Component {
         },
         {
           title: '物料名称', dataIndex: 'ITEM_DESC', key: 'ITEM_DESC', width: 180,
-          sorter: (a, b) => a['ITEM_DESC'].charCodeAt(0) - b['ITEM_DESC'].charCodeAt(0),
+          sorter: ({ ITEM_DESC:a }, { ITEM_DESC:b }) => a ? a.localeCompare(b) : -1,
           render: (text, record, index) => (
             <EditableCell
               dataType='string'
@@ -42,7 +44,7 @@ class MatterTable extends React.Component {
         },
         {
           title: '物料类型', dataIndex: 'ITEM_TYPE', key: 'ITEM_TYPE', width: 180,
-          sorter: (a, b) => a['ITEM_TYPE'].charCodeAt(0) - b['ITEM_TYPE'].charCodeAt(0),
+          sorter: ({ ITEM_TYPE:a }, { ITEM_TYPE:b }) => a ? a.localeCompare(b) : -1,
           render: (text, record, index) => (
             <EditableCell
               dataType='string'
@@ -56,7 +58,7 @@ class MatterTable extends React.Component {
         },
         {
           title: '单位', dataIndex: 'UM', key: 'UM', width: 180,
-          sorter: (a, b) => a['UM'].charCodeAt(0) - b['UM'].charCodeAt(0),
+          sorter: ({ UM:a }, { UM:b }) => a ? a.localeCompare(b) : -1,
           render: (text, record, index) => (
             <EditableCell
               dataType='string'
@@ -70,7 +72,7 @@ class MatterTable extends React.Component {
         },
         {
           title: '规格', dataIndex: 'SQEC', key: 'SQEC', width: 180,
-          sorter: (a, b) => a['SQEC'].charCodeAt(0) - b['SQEC'].charCodeAt(0),
+          sorter: ({ SQEC:a }, { SQEC:b }) => a ? a.localeCompare(b) : -1,
           render: (text, record, index) => (
             <EditableCell
               dataType='string'
@@ -84,7 +86,7 @@ class MatterTable extends React.Component {
         },
         {
           title: '供应商', dataIndex: 'SUPPLIER', key: 'SUPPLIER', width: 280,
-          sorter: (a, b) => a['SUPPLIER'].charCodeAt(0) - b['SUPPLIER'].charCodeAt(0),
+          sorter: ({ SUPPLIER:a }, { SUPPLIER:b }) => a ? a.localeCompare(b) : -1,
           render: (text, record, index) => (
             <EditableCell
               dataType='string'
@@ -98,7 +100,7 @@ class MatterTable extends React.Component {
         },
         {
           title: '品牌', dataIndex: 'BRAND', key: 'BRAND', width: 180, visible: false,
-          sorter: (a, b) => a['BRAND'].charCodeAt(0) - b['BRAND'].charCodeAt(0),
+          sorter: ({ BRAND:a }, { BRAND:b }) => a ? a.localeCompare(b) : -1,
           render: (text, record, index) => (
             <EditableCell
               dataType='string'
@@ -112,7 +114,7 @@ class MatterTable extends React.Component {
         },
         {
           title: '生产厂家', dataIndex: 'ProductFactory', key: 'ProductFactory', width: 180,
-          sorter: (a, b) => a['ProductFactory'].charCodeAt(0) - b['ProductFactory'].charCodeAt(0),
+          sorter: ({ ProductFactory:a }, { ProductFactory: b }) => a ? a.localeCompare(b) : -1,
           render: (text, record, index) => (
             <EditableCell
               dataType='string'
@@ -126,7 +128,7 @@ class MatterTable extends React.Component {
         },
         {
           title: '编制日期', dataIndex: 'ITEM_DATE', key: 'ITEM_DATE', width: 240,
-          sorter: (a, b) => a['ITEM_DATE'].charCodeAt(0) - b['ITEM_DATE'].charCodeAt(0),
+          sorter: ({ ITEM_DATE:a }, { ITEM_DATE:b }) => new Date(a) - new Date(b),
           render: (text, record, index) => (
             <EditableCell
               dataType='datetime'
@@ -138,7 +140,6 @@ class MatterTable extends React.Component {
               onEdit={this.onEdit}
             />)
         },
-
         {
           title: '操作',
           key: 'action',
@@ -178,31 +179,6 @@ class MatterTable extends React.Component {
         this.dataIndex = { ...this.dataIndex, [column.dataIndex]: -1 }
     })
 
-    // this.pagination = {
-    //   current:this.props.pagination.current,
-    //   total: this.props.pagination.total,
-    //   showSizeChanger: true,
-    //   total:this.props.pagination.total,
-    //   onShowSizeChange: (current, pageSize) => {
-    //     this.props.dispatch({
-    //       type: 'changeShowSize',
-    //       payload: {
-    //         current: current,
-    //         pageSize: pageSize,
-    //       }
-    //     })
-    //   },
-    //   onChange: (current) => {
-    //     this.props.dispatch({
-    //       type: 'fetch',
-    //       payload: {
-    //         current: current,
-    //         pageSize: this.props.pagination.pageSize,
-    //       }
-    //     })
-    //   },
-    // }
-
     this.state = {
       columns: this.columns.filter(item => item.visible!==false),
       editable: {
@@ -210,7 +186,10 @@ class MatterTable extends React.Component {
         status: 'normal',
         ...this.dataIndex
       },
+      indeterminate: true,
+      checkAll: false,
     }
+
   }
 
   HandleDelete (id) {
@@ -278,18 +257,88 @@ class MatterTable extends React.Component {
     }
   }
 
+  handleCheckBoxChange (dataIndex, checked) {
+    this.columns = this.columns.map(item => {
+      if (item.dataIndex===dataIndex) {
+        checked ?
+          item.visible = true :
+          item.visible = false
+      }
+      return item;
+    });
+    this.setState({
+      columns: this.columns.filter(item => item.visible!==false),
+      indeterminate: !!this.columns.length,
+      checkAll: this.columns.length===this.columns.filter(item => item.visible!==false).length,
+    })
+  }
+
+  onCheckAllChange (checked) {
+    this.columns = this.columns.map(item => {
+      checked ?
+        item.visible = true :
+        item.visible = false
+      return item;
+    });
+    this.setState({
+      columns: this.columns.filter(item => item.visible!==false),
+      indeterminate: false,
+      checkAll: checked,
+    });
+  }
+
   render () {
     return (
-      <Table
-        columns={this.state.columns}
-        dataSource={this.props.dataSource}
-        rowKey="id"
-        key="MatterTable"
-        scroll={{ x: 1300 }}
-        pagination={false}
-        loading={this.props.loading}
-      >
-      </Table>
+      <div>
+        <Table
+          columns={this.state.columns}
+          dataSource={this.props.dataSource}
+          rowKey="id"
+          key="MatterTable"
+          scroll={{ x: 1300 }}
+          pagination={false}
+          loading={this.props.loading}
+          title={() =>
+            <div className={styles.titleRight}>
+              <Popover trigger="click" placement="leftBottom"
+                       title={(
+                         <Checkbox
+                           indeterminate={this.state.indeterminate}
+                           checked={this.state.checkAll}
+                           onChange={e => this.onCheckAllChange(e.target.checked)}
+                         >
+                           全选
+                         </Checkbox>
+                       )}
+                       content={
+                         (
+                           <ul>
+                             {this.columns.map((item, index) => {
+                               return (
+                                 <li className={styles.checkboxLi} key={index}>
+                                   <Checkbox defaultChecked={item.visible && item.visible===false}
+                                             checked={!!this.state.columns.find(
+                                               showColumn => showColumn.dataIndex===item.dataIndex)
+                                             }
+                                             onChange={(e) => this.handleCheckBoxChange(item.dataIndex, e.target.checked)}
+                                             key={index}
+                                   >
+                                     {item.title}
+                                   </Checkbox>
+                                 </li>
+                               )
+                             })}
+                           </ul>
+                         )
+                       }
+              >
+                <Button>列表选项</Button>
+              </Popover>
+            </div>
+          }
+        >
+        </Table>
+      </div>
     )
   }
 }

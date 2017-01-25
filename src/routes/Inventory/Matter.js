@@ -4,6 +4,7 @@ import styles from './Matter.css';
 import { Button, Icon, Pagination } from 'antd';
 import UploadFile from '../../components/common/UploadFile';
 import MatterTable from '../../components/Inventory/Matter/MatterTable';
+import AddItemListModal from '../../components/Inventory/Matter/AddItemListModal';
 
 function Matter ({ columns, ItemList, dispatch, loading, pagination }) {
 
@@ -27,10 +28,18 @@ function Matter ({ columns, ItemList, dispatch, loading, pagination }) {
     })
   }
 
+  function handleAddItemList () {
+
+  }
+
   return (
     <div>
       <div className={styles.buttonArea}>
-        <Button type="primary"><Icon type="plus"></Icon>新增物料</Button>
+        <AddItemListModal onOk={handleAddItemList} record={{}}>
+          <Button type="primary">
+            <Icon type="plus"></Icon>新增物料
+          </Button>
+        </AddItemListModal>
         <UploadFile/>
       </div>
       <div className={styles.tableArea}>
@@ -49,7 +58,6 @@ function Matter ({ columns, ItemList, dispatch, loading, pagination }) {
 function mapStateToProps (state) {
   const matter = state['Inventory/Matter'];
   return {
-    columns: matter.columns,
     ItemList: matter.ItemList,
     loading: state.loading.models['Inventory/Matter'],
     pagination: matter.pagination
