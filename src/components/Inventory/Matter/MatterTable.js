@@ -47,13 +47,16 @@ class MatterTable extends React.Component {
           sorter: ({ ITEM_TYPE:a }, { ITEM_TYPE:b }) => a ? a.localeCompare(b) : -1,
           render: (text, record, index) => (
             <EditableCell
-              dataType='string'
+              dataType='select'
               value={text}
               dataIndex='ITEM_TYPE'
               onChange={this.onChange}
               index={index}
               editable={this.state.editable}
               onEdit={this.onEdit}
+              options={this.props.ItemType.map((item, index) =>
+                <Option value={item.ITEM_TYPE}
+                        key={index}>{item.ITEM_TYPE}</Option>)}
             />)
         },
         {
@@ -89,7 +92,7 @@ class MatterTable extends React.Component {
           sorter: ({ SUPPLIER:a }, { SUPPLIER:b }) => a ? a.localeCompare(b) : -1,
           render: (text, record, index) => (
             <EditableCell
-              dataType='string'
+              dataType='select'
               value={text}
               dataIndex='SUPPLIER'
               onChange={this.onChange}
@@ -196,8 +199,8 @@ class MatterTable extends React.Component {
     console.log('delete ' + id);
     const { dispatch } = this.props;
     dispatch({
-      type: 'Inventory/Matter/delete',
-      payload: id,
+      type: 'Inventory/Matter/deleteData',
+      payload: { id: id },
     })
   }
 

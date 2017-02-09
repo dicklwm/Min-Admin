@@ -10,7 +10,7 @@ export async function saveItemList (params) {
 }
 
 export async function deleteItemList (params) {
-  return request('/api/', {
+  return request('/api/inventory/deleteItemList', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(params)
@@ -22,5 +22,17 @@ export async function getItemList (params) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(params)
+  })
+}
+
+export async function getItemType () {
+  return request('/api/inventory/getItemType', {
+    method: 'GET',
+  })
+}
+
+export async function getAllMain () {
+  return request('/api/inventory/getAllMain', {
+    method: 'GET',
   })
 }

@@ -1,4 +1,5 @@
 import * as MatterService from '../../services/Inventory/Matter';
+import { message } from 'antd';
 
 export default {
   namespace: 'Inventory/Matter',
@@ -9,6 +10,11 @@ export default {
       total: 0,
       pageSize: 10,
     },
+    ItemType: [],
+    ProductFactory: [],
+    BrandType: [],
+    ItemClass: [],
+
   },
   reducers: {
     saveData(state, action){
@@ -39,7 +45,35 @@ export default {
         ...state,
         pagination: { ...state.pagination, current: current, pageSize: pageSize },
       }
-    }
+    },
+
+    mainData(state, action){
+      return {
+        ...state,
+        ItemType: action.payload.ItemType,
+        BrandType: action.payload.BrandType,
+        ItemClass: action.payload.ItemClass,
+        ProductFactory: action.payload.ProductFactory,
+      }
+    },
+
+    newDataReducer(state, action){
+      let ItemList = state.ItemList;
+      ItemList.unshift(...action.payload.ItemList);
+      return {
+        ...state,
+        ItemList: ItemList,
+      }
+    },
+
+    deleteDataReducer(state,action){
+      let ItemList = state.ItemList;
+      ItemList.splice(ItemList.findIndex(item=>item.id===action.payload),1);
+      return{
+        ...state,
+        ItemList: ItemList,
+      }
+    },
 
   },
   effects: {
@@ -57,8 +91,15 @@ export default {
         })
       }
     },
-    *delete({ payload }, { call, put }){
-
+    *deleteData({ payload }, { call, put }){
+      const res = yield call(MatterService.deleteItemList, payload);
+      console.log(res);
+      if (res.data.success) {
+        yield put({
+          type: 'deleteDataReducer',
+          payload: payload.id,
+        })
+      }
     },
 
     *fetch({ payload }, { call, put }){
@@ -81,6 +122,28 @@ export default {
       }
     },
 
+    *fetchMaintenance({}, { call, put }){
+      const res = yield call(MatterService.getAllMain);
+      if (res.data.success) {
+        yield put({
+          type: 'mainData',
+          payload: res.data.data,
+        })
+      }
+    },
+
+    *newData({ payload }, { call, put }){
+      const res = yield call(MatterService.saveItemList, payload);
+      if (res.data.success) {
+        yield put({
+          type: 'newDataReducer',
+          payload: res.data.data,
+        })
+      } else {
+        message.error(res.data.msg);
+      }
+    }
+
   },
   subscriptions: {
     setup({ dispatch, history }){
@@ -89,7 +152,8 @@ export default {
             dispatch({
               type: 'fetch',
               payload: {}
-            })
+            });
+            dispatch({ type: 'fetchMaintenance' });
           }
         }
       )

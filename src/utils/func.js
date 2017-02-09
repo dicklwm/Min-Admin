@@ -34,47 +34,27 @@ Date.prototype.format = function (format) {
         : ('00' + o[k]).substr(('' + o[k]).length))
     }
   }
-  return format
+  return format;
 }
 
-function makeColumn (title, dataIndex, editable, dataType = 'string', width = 150, fixed = false, sorter = true, Edit = true, onChange) {
-  return {
-    title: title,
-    dataIndex: dataIndex,
-    key: dataIndex,
-    width: width,
-    fixed: fixed,
-    sorter: sorter===false ? null :
-      dataType==='number' ?
-        (a, b) => a[dataIndex] - b[dataIndex] :
-        dataType==='string' ?
-          (a, b) => a[dataIndex].charCodeAt(0) - b[dataIndex].charCodeAt(0) :
-          dataType==='date' || 'datetime' ?
-            (a, b) => new Date(a[dataIndex]) - new Date(b[dataIndex]) :
-            null,
-    render: Edit ? (text, record, index) => (
-        <EditableCell
-          editable={editable[dataIndex]}
-          dataType={dataType}
-          value={text}
-          dataIndex={dataIndex}
-          onChange={onChange}
-        />
-      ) : null
-  }
-}
+function makeChildren (fathers, children, fKeyName, fValueName, cKeyName, cValueName, fatherKey = 'id', childrenKey = 'MASTERID',) {
 
-function makeColumns (array = [], onChange) {
-  let allColumns = [];
-  array.forEach(column => {
-    allColumns.push(
-      makeColumn(column[0], column[1], column[2], column[3], column[4], column[5], column[6], onChange)
-    )
+  return fathers.map((father) => {
+    father['children'] = [];
+    father['label'] = father[fKeyName];
+    father['value'] = father[fValueName];
+    children.forEach(child => {
+      if (father[fatherKey]===child[childrenKey]) {
+        child['label'] = child[cKeyName];
+        child['value'] = child[cValueName];
+        father['children'].push(child)
+      }
+    })
+    return father;
   })
-  return allColumns;
+
 }
 
 module.exports = {
-  makeColumn,
-  makeColumns
+  makeChildren
 }

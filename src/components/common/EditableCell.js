@@ -1,8 +1,10 @@
 import React from 'react';
 import styles from './EditableCell.css';
-import { Input, Icon, DatePicker, InputNumber, Tooltip } from 'antd';
+import { Input, Icon, DatePicker, InputNumber, Tooltip, Select } from 'antd';
 import moment from 'moment';
 import NumericInput from './NumericInput';
+
+const Option = Select.Option;
 
 class EditableCell extends React.Component {
   state = {
@@ -10,19 +12,23 @@ class EditableCell extends React.Component {
     editable: false,
   }
   handleChange = (e) => {
+    console.log(e);
     const value = e.target.value;
     this.setState({ value });
   }
 
   handleDateChange = (date, dateString) => {
-    console.log(date, dateString);
     this.setState({ value: dateString });
   }
 
   check = () => {
     this.setState({ editable: false });
     if (this.props.onChange) {
-      this.props.onChange(this.state.value, this.props.index, this.props.dataIndex);
+      if (this.props.dataType!== 'select')
+        this.props.onChange(this.state.value, this.props.index, this.props.dataIndex);
+      else {
+        this.props.onChange(this.state.value, this.props.index, this.props.dataIndex);
+      }
     }
   }
   edit = () => {
@@ -33,6 +39,13 @@ class EditableCell extends React.Component {
   makeInput (dataType) {
     const { value } = this.state;
     switch (dataType.toLowerCase()) {
+
+      case 'select':
+        return (
+          <Select showSearch labelInValue defaultValue={value} onChange={this.handleChange}>
+            {this.props.options}
+          </Select>
+        )
 
       case 'string':
         return (

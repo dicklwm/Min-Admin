@@ -5,6 +5,11 @@
       "target": "http://www.mitarl.com:8080/webapi",
       "changeOrigin": true,
       "pathRewrite": { "^/api" : "" }
+    },
+    "/fileUpload":{
+      "target": "http://www.mitarl.com:8080/module-operation!executeOperation?operation=FileUpload",
+      "changeOrigin": true,
+      "pathRewrite": { "^/fileUpload" : "" }
     }
   },
   "env": {
