@@ -14,6 +14,15 @@ export default {
     ProductFactory: [],
     BrandType: [],
     ItemClass: [],
+    query: [{
+      ITEM: null,
+      ITEM_DESC: null,
+      ITEM_TYPE: null,
+      BRAND: null,
+      ProductFactory: null,
+      SQEC: null,
+      SUPPLIER: null,
+    }],
 
   },
   reducers: {
@@ -66,12 +75,33 @@ export default {
       }
     },
 
-    deleteDataReducer(state,action){
+    deleteDataReducer(state, action){
       let ItemList = state.ItemList;
-      ItemList.splice(ItemList.findIndex(item=>item.id===action.payload),1);
-      return{
+      ItemList.splice(ItemList.findIndex(item => item.id===action.payload), 1);
+      return {
         ...state,
         ItemList: ItemList,
+      }
+    },
+
+    queryData(state, action){
+      return {
+        ...state,
+        query: action.payload.query
+      }
+    },
+    clearQuery(state){
+      return {
+        ...state,
+        query: [{
+          ITEM: null,
+          ITEM_DESC: null,
+          ITEM_TYPE: null,
+          BRAND: null,
+          ProductFactory: null,
+          SQEC: null,
+          SUPPLIER: null,
+        }],
       }
     },
 
@@ -102,8 +132,10 @@ export default {
       }
     },
 
-    *fetch({ payload }, { call, put }){
-      const res = yield call(MatterService.getItemList, payload);
+    *fetch({}, { select, call, put }){
+      const pagination = yield select(state => state['Inventory/Matter'].pagination);
+      const query = yield select(state => state['Inventory/Matter'].query);
+      const res = yield call(MatterService.getItemList, { ...pagination, query });
       if (res.data.success) {
         yield put({
           type: 'fetchData',
@@ -112,14 +144,14 @@ export default {
       }
     },
 
-    *changePage({ payload }, { call, put }){
-      const res = yield call(MatterService.getItemList, payload);
-      if (res.data.success) {
-        yield put({
-          type: 'fetchData',
-          payload: res.data.data,
-        })
-      }
+    *queryData({}, { put }){
+      yield put({ type: 'fetch' });
+    },
+    *changePage({}, { put }){
+      yield put({ type: 'fetch' });
+    },
+    *clearQuery({}, { put }){
+      yield put({ type: 'fetch' });
     },
 
     *fetchMaintenance({}, { call, put }){
@@ -151,7 +183,6 @@ export default {
           if (pathname==='/inventory/matter') {
             dispatch({
               type: 'fetch',
-              payload: {}
             });
             dispatch({ type: 'fetchMaintenance' });
           }

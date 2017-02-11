@@ -1,32 +1,32 @@
 import React from 'react';
-import { Button, Icon } from 'antd';
-import request from '../../utils/request';
+import { Button, Icon, Upload, message } from 'antd';
 
-function UploadFile ({}) {
+function UploadFile ({ uploading, done, error, accept }) {
   return (
-    <form
-      style={{ display: 'inline-block' }}
-      method="post"
-    >
-      <input type="file" name="file" style={{ display: 'none' }} onChange={e => {
-        let files = e.target.files;
-        if (!!files.length) {
-          let data = new FormData();
-          data.append('file', files[0]);
-          console.log(data);
-          request('/fileUpload', {
-            method: 'POST',
-            body: data
-          })
+    <Upload
+      name='file'
+      action='/fileUpload'
+      showUploadList={false}
+      onChange={(info) => {
+        if (info.file.status==='uploading') {
+          uploading && uploading(info.file);
+          console.log(info.file, info.fileList);
+          message.info(`${info.file.name} 正在上传`);
         }
-      }}/>
-      <Button type="ghost" onClick={e => {
-        let fileInput = e.target.parentElement.getElementsByTagName('input')[0] || e.target.parentElement.parentElement.getElementsByTagName('input')[0];
-        fileInput.click();
-      }}>
+        if (info.file.status==='done') {
+          done && done(info.file);
+          message.success(`${info.file.name} 上传成功`, 5);
+        } else if (info.file.status==='error') {
+          error && error(info.file);
+          message.error(`${info.file.name} 上传失败`, 5);
+        }
+      }}
+      accept={accept}
+    >
+      <Button type="ghost">
         <Icon type="upload"/>上传
       </Button>
-    </form>
+    </Upload>
   );
 }
 

@@ -1,7 +1,9 @@
 import React from 'react';
 import { Table, Button, Popconfirm, Popover, Select, Checkbox } from 'antd';
-import EditableCell from '../../common/EditableCell';
 import styles from './MatterTable.css';
+
+import EditableCell from '../../common/EditableCell';
+import QueryForm from './QueryForm';
 
 const Option = Select.Option;
 
@@ -336,6 +338,25 @@ class MatterTable extends React.Component {
                        }
               >
                 <Button>列表选项</Button>
+              </Popover>
+              <Popover trigger="hover" placement="leftBottom"
+                       title={
+                         <div>
+                           <span>高级检索</span>
+                           <div style={{ float: 'right' }}>
+
+                           </div>
+                         </div>
+                       }
+                       content={
+                         <QueryForm
+                           query={this.props.query}
+                           onOk={this.props.onOk}
+                           onClear={() => this.props.dispatch({ type: "Inventory/Matter/clearQuery" })}
+                         />
+                       }
+              >
+                <Button type="primary" icon="search" className={styles.searchButton}>高级检索</Button>
               </Popover>
             </div>
           }
