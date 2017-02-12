@@ -12,25 +12,15 @@ function QueryForm ({ onOk, onClear, form }) {
     wrapperCol: { xs: 16 },
   };
 
-  function makeFormItem (label, key, required = false, options = { initialValue: null }) {
-    if (required) {
-      if (options.initialValue===null) {
-        options = {
-          initialValue: null,
-          rules: [{ required: true, message: label + " 必填" }],
-        }
-      }
-    }
+  function makeFormItem (label, key) {
     return (
       <Col {...ColLayout}>
         <FormItem
           {...formItemLayout}
           label={label}
-          required={required}
-          hasFeedback={required}
         >
           {
-            getFieldDecorator(key, options)(<Input placeholder={"请输入" + label}/>)
+            getFieldDecorator(key)(<Input placeholder={"请输入" + label} onPressEnter={okHandler}/>)
           }
         </FormItem>
       </Col>

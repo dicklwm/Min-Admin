@@ -6,6 +6,11 @@
   margin: 5px 0;
 }
 
-.searchButton{
-  margin-left:12px;
+.searchButton {
+  margin-left: 12px;
 }
+
+.AlertLeft {
+  text-align: left;
+}
+

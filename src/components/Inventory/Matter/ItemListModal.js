@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'dva';
 import { Modal, Form, Input, Select, Row, Col, DatePicker, Cascader } from 'antd';
 import moment from 'moment';
 import { makeChildren } from '../../../utils/func';
@@ -6,7 +7,7 @@ import { makeChildren } from '../../../utils/func';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-class AddItemListModal extends React.Component {
+class ItemListModal extends React.Component {
 
   constructor (props) {
     super(props);
@@ -20,13 +21,13 @@ class AddItemListModal extends React.Component {
     this.setState({
       visible: true,
     });
-  };
+  }
 
   hideModelHandler = () => {
     this.setState({
       visible: false,
     });
-  };
+  }
 
   okHandler = () => {
     const { onOk } = this.props;
@@ -90,7 +91,7 @@ class AddItemListModal extends React.Component {
 
   render () {
 
-    const { children, BrandType, ProductFactory, ItemClass, ItemType } = this.props;
+    const { children, BrandType, ProductFactory, ItemClass, ItemType, inner, onModalCancel } = this.props;
     const { getFieldDecorator, setFieldsValue } = this.props.form;
     const formItemLayout = {
       labelCol: { lg: 8, xs: 4 },
@@ -102,13 +103,14 @@ class AddItemListModal extends React.Component {
           { children }
         </span>
         <Modal
-          title="新增物料"
-          visible={this.state.visible}
+          title={this.props.title}
+          visible={inner ? this.state.visible : this.props.visible}
           onOk={this.okHandler}
-          onCancel={this.hideModelHandler}
+          onCancel={inner ? this.hideModelHandler : onModalCancel}
           width={850}
         >
           <Form onSubmit={this.okHandler}>
+            {getFieldDecorator('id')(<div></div>)}
             <Row gutter={20}>
               {this.makeFormItem('物料编码', 'ITEM')}
               {this.makeFormItem('物料名称', 'ITEM_DESC', true)}
@@ -149,8 +151,8 @@ class AddItemListModal extends React.Component {
                       <Select placeholder="请选择供应商" showSearch labelInValue onChange={value => setFieldsValue({
                         SUPPLIERID: value.key
                       })}>
-                        <Option value={"ss"}>工具</Option>
-                        <Option value={"gg"}>其他</Option>
+                        <Option value={"工具"}>工具</Option>
+                        <Option value={"其他"}>其他</Option>
                       </Select>
                     )
                   }
@@ -258,4 +260,44 @@ class AddItemListModal extends React.Component {
   }
 }
 
-export default Form.create()(AddItemListModal);
+function mapStateToProps (state) {
+  const matter = state['Inventory/Matter'];
+  return {
+    ItemType: matter.ItemType,
+    BrandType: matter.BrandType,
+    ProductFactory: matter.ProductFactory,
+    ItemClass: matter.ItemClass,
+  };
+}
+
+export default connect(mapStateToProps)(Form.create({
+  mapPropsToFields(props){
+    let obj = {};
+    for (let o in props.ItemList) {
+      let value = props.ItemList[o];
+      switch (o) {
+        case 'ITEM_TYPE':
+          let ITEM_TYPE = props.ItemType.find(item => item.ITEM_TYPE===value);
+          let ITEM_CLASS = ITEM_TYPE ? ITEM_TYPE['ITEM_CLASS'] : null;
+          let AllItemClass = props.ItemClass.find(item => item['ITEM_CLASS']===ITEM_CLASS);
+          obj[o] = { value: [AllItemClass ? AllItemClass['ITEM_CLASS'] : null, value] }
+          break;
+        case 'SUPPLIER':
+        case 'CLIENT':
+        case 'BRAND':
+        case 'ProductFactory':
+          obj[o] = { value: { value: value, label: value } }
+          break;
+        case 'ITEM_DATE':
+          obj[o] = { value: moment(value) };
+          break;
+        default:
+          obj[o] = { value: value }
+          break;
+      }
+    }
+    return {
+      ...obj
+    }
+  }
+})(ItemListModal));

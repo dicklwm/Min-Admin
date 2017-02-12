@@ -4,9 +4,9 @@ import styles from './Matter.css';
 import { Button, Icon, Pagination } from 'antd';
 import UploadFile from '../../components/common/UploadFile';
 import MatterTable from '../../components/Inventory/Matter/MatterTable';
-import AddItemListModal from '../../components/Inventory/Matter/AddItemListModal';
+import ItemListModal from '../../components/Inventory/Matter/ItemListModal';
 
-function Matter ({ columns, ItemList, dispatch, loading, pagination, ItemType, BrandType, ProductFactory, ItemClass,query }) {
+function Matter ({ columns, ItemList, dispatch, loading, pagination, ItemType, BrandType, ProductFactory, ItemClass, query }) {
 
   function handlePageChange (current) {
     dispatch({
@@ -28,12 +28,13 @@ function Matter ({ columns, ItemList, dispatch, loading, pagination, ItemType, B
     })
   }
 
-  function handleAddItemList (value) {
+  function handleAddItemList (values) {
     dispatch({
-      type: 'Inventory/Matter/newData',
+      type: 'Inventory/Matter/saveData',
       payload: {
-        ItemList: [value]
-      }
+        ItemList: [values]
+      },
+      method:'new'
     })
   }
 
@@ -50,12 +51,11 @@ function Matter ({ columns, ItemList, dispatch, loading, pagination, ItemType, B
   return (
     <div>
       <div className={styles.buttonArea}>
-        <AddItemListModal onOk={handleAddItemList} ItemType={ItemType} BrandType={BrandType}
-                          ProductFactory={ProductFactory} ItemClass={ItemClass}>
+        <ItemListModal onOk={handleAddItemList} inner title="新增物料">
           <Button type="primary">
             <Icon type="plus"></Icon>新增物料
           </Button>
-        </AddItemListModal>
+        </ItemListModal>
         <UploadFile done={(file) => {
           dispatch({ type: 'Inventory/Matter/uploadFile', payload: file.response.data[0].id })
         }}

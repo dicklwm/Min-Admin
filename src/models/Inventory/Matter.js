@@ -26,7 +26,7 @@ export default {
 
   },
   reducers: {
-    saveData(state, action){
+    saveDataReducer(state, action){
       const newItemList = state.ItemList.map(item => {
         let newItem = action.payload.ItemList.find(newItem => newItem.id===item.id);
         if (newItem)
@@ -104,23 +104,37 @@ export default {
         }],
       }
     },
+    closeQuery(state, action){
+      let query = state.query;
+      query[0][action.payload] = null;
+      return {
+        ...state,
+        query: query
+      }
+    },
 
   },
   effects: {
-    *saveValue({ payload }, { call, put, select }){
 
-      const { dataIndex, id, value }=payload;
-      let ItemList = yield select(state => state['Inventory/Matter'].ItemList);
-      let newObj = { ItemList: ItemList.filter(item => item.id===id) };
-      newObj.ItemList[0][dataIndex] = value;
-      const res = yield call(MatterService.saveItemList, newObj);
+    *saveData({ payload, method }, { call, put }){
+      const res = yield call(MatterService.saveItemList, payload);
       if (res.data.success) {
-        yield put({
-          type: 'saveData',
-          payload: res.data.data,
-        })
+        if (method==='update') {
+          yield put({
+            type: 'saveDataReducer',
+            payload: res.data.data,
+          })
+        } else {
+          yield put({
+            type: 'newDataReducer',
+            payload: res.data.data,
+          })
+        }
+      } else {
+        message.error(res.data.msg);
       }
     },
+
     *deleteData({ payload }, { call, put }){
       const res = yield call(MatterService.deleteItemList, payload);
       console.log(res);
@@ -153,6 +167,9 @@ export default {
     *clearQuery({}, { put }){
       yield put({ type: 'fetch' });
     },
+    *closeQuery({}, { put }){
+      yield put({ type: 'fetch' });
+    },
 
     *fetchMaintenance({}, { call, put }){
       const res = yield call(MatterService.getAllMain);
@@ -163,18 +180,6 @@ export default {
         })
       }
     },
-
-    *newData({ payload }, { call, put }){
-      const res = yield call(MatterService.saveItemList, payload);
-      if (res.data.success) {
-        yield put({
-          type: 'newDataReducer',
-          payload: res.data.data,
-        })
-      } else {
-        message.error(res.data.msg);
-      }
-    }
 
   },
   subscriptions: {

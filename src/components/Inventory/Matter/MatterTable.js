@@ -1,18 +1,18 @@
 import React from 'react';
-import { Table, Button, Popconfirm, Popover, Select, Checkbox } from 'antd';
+import ReactDom from 'react-dom';
+import { Table, Button, Popconfirm, Popover, Alert, Checkbox, Tooltip, Tag } from 'antd';
 import styles from './MatterTable.css';
 
-import EditableCell from '../../common/EditableCell';
+// import EditableCell from '../../common/EditableCell';
 import QueryForm from './QueryForm';
-
-const Option = Select.Option;
+import ItemListModal from './ItemListModal';
 
 class MatterTable extends React.Component {
 
   constructor (props) {
     super(props);
-    this.onEdit = this.onEdit.bind(this);
-    this.onChange = this.onChange.bind(this);
+    this.onModalCancel = this.onModalCancel.bind(this);
+    this.handleSaveItemList = this.handleSaveItemList.bind(this);
 
     this.columns =
       [
@@ -20,130 +20,82 @@ class MatterTable extends React.Component {
           title: '物料编码', dataIndex: 'ITEM', key: 'ITEM', width: 180,
           sorter: ({ ITEM:a }, { ITEM:b }) => a ? a.localeCompare(b) : -1,
           render: (text, record, index) => (
-            <EditableCell
-              dataType='string'
-              value={text}
-              dataIndex='ITEM'
-              onChange={this.onChange}
-              index={index}
-              editable={this.state.editable}
-              onEdit={this.onEdit}
-            />)
+            <Tooltip title={text || ''} trigger="hover">
+              {text}
+            </Tooltip>
+          )
         },
         {
           title: '物料名称', dataIndex: 'ITEM_DESC', key: 'ITEM_DESC', width: 180,
           sorter: ({ ITEM_DESC:a }, { ITEM_DESC:b }) => a ? a.localeCompare(b) : -1,
           render: (text, record, index) => (
-            <EditableCell
-              dataType='string'
-              value={text}
-              dataIndex='ITEM_DESC'
-              onChange={this.onChange}
-              index={index}
-              editable={this.state.editable}
-              onEdit={this.onEdit}
-            />)
+            <Tooltip title={text || ''} trigger="hover">
+              {text}
+            </Tooltip>
+          )
         },
         {
           title: '物料类型', dataIndex: 'ITEM_TYPE', key: 'ITEM_TYPE', width: 180,
           sorter: ({ ITEM_TYPE:a }, { ITEM_TYPE:b }) => a ? a.localeCompare(b) : -1,
           render: (text, record, index) => (
-            <EditableCell
-              dataType='select'
-              value={text}
-              dataIndex='ITEM_TYPE'
-              onChange={this.onChange}
-              index={index}
-              editable={this.state.editable}
-              onEdit={this.onEdit}
-              options={this.props.ItemType.map((item, index) =>
-                <Option value={item.ITEM_TYPE}
-                        key={index}>{item.ITEM_TYPE}</Option>)}
-            />)
+            <Tooltip title={text || ''} trigger="hover">
+              {text}
+            </Tooltip>
+          )
         },
         {
           title: '单位', dataIndex: 'UM', key: 'UM', width: 180,
           sorter: ({ UM:a }, { UM:b }) => a ? a.localeCompare(b) : -1,
           render: (text, record, index) => (
-            <EditableCell
-              dataType='string'
-              value={text}
-              dataIndex='UM'
-              onChange={this.onChange}
-              index={index}
-              editable={this.state.editable}
-              onEdit={this.onEdit}
-            />)
+            <Tooltip title={text || ''} trigger="hover">
+              {text}
+            </Tooltip>
+          )
         },
         {
           title: '规格', dataIndex: 'SQEC', key: 'SQEC', width: 180,
           sorter: ({ SQEC:a }, { SQEC:b }) => a ? a.localeCompare(b) : -1,
           render: (text, record, index) => (
-            <EditableCell
-              dataType='string'
-              value={text}
-              dataIndex='SQEC'
-              onChange={this.onChange}
-              index={index}
-              editable={this.state.editable}
-              onEdit={this.onEdit}
-            />)
+            <Tooltip title={text || ''} trigger="hover">
+              {text}
+            </Tooltip>
+          )
         },
         {
           title: '供应商', dataIndex: 'SUPPLIER', key: 'SUPPLIER', width: 280,
           sorter: ({ SUPPLIER:a }, { SUPPLIER:b }) => a ? a.localeCompare(b) : -1,
           render: (text, record, index) => (
-            <EditableCell
-              dataType='select'
-              value={text}
-              dataIndex='SUPPLIER'
-              onChange={this.onChange}
-              index={index}
-              editable={this.state.editable}
-              onEdit={this.onEdit}
-            />)
+            <Tooltip title={text || ''} trigger="hover">
+              {text}
+            </Tooltip>
+          )
         },
         {
           title: '品牌', dataIndex: 'BRAND', key: 'BRAND', width: 180, visible: false,
           sorter: ({ BRAND:a }, { BRAND:b }) => a ? a.localeCompare(b) : -1,
           render: (text, record, index) => (
-            <EditableCell
-              dataType='string'
-              value={text}
-              dataIndex='BRAND'
-              onChange={this.onChange}
-              index={index}
-              editable={this.state.editable}
-              onEdit={this.onEdit}
-            />)
+            <Tooltip title={text || ''} trigger="hover">
+              {text}
+            </Tooltip>
+          )
         },
         {
           title: '生产厂家', dataIndex: 'ProductFactory', key: 'ProductFactory', width: 180,
           sorter: ({ ProductFactory:a }, { ProductFactory: b }) => a ? a.localeCompare(b) : -1,
           render: (text, record, index) => (
-            <EditableCell
-              dataType='string'
-              value={text}
-              dataIndex='ProductFactory'
-              onChange={this.onChange}
-              index={index}
-              editable={this.state.editable}
-              onEdit={this.onEdit}
-            />)
+            <Tooltip title={text || ''} trigger="hover">
+              {text}
+            </Tooltip>
+          )
         },
         {
           title: '编制日期', dataIndex: 'ITEM_DATE', key: 'ITEM_DATE', width: 240,
           sorter: ({ ITEM_DATE:a }, { ITEM_DATE:b }) => new Date(a) - new Date(b),
           render: (text, record, index) => (
-            <EditableCell
-              dataType='datetime'
-              value={text}
-              dataIndex='ITEM_DATE'
-              onChange={this.onChange}
-              index={index}
-              editable={this.state.editable}
-              onEdit={this.onEdit}
-            />)
+            <Tooltip title={text || ''} trigger="hover">
+              {text}
+            </Tooltip>
+          )
         },
         {
           title: '操作',
@@ -151,23 +103,11 @@ class MatterTable extends React.Component {
           width: 100,
           fixed: 'right',
           render: (text, record, index) => {
-            const global = this.state.editable.global;
-            const editable = (global!== -1) && global===index;
             return (
               <div>
-                {editable ? <span>
-                    <Button type="primary" shape="circle" icon="save" size="small"
-                            onClick={() => this.editDone(index, 'save')}>
-                    </Button>
-                    <Popconfirm title="确认取消？" onConfirm={() => this.editDone(index, 'cancel')}>
-                      <Button type="primary" shape="circle" icon="close" size="small"></Button>
-                    </Popconfirm>
-                  </span>
-                  :
-                  <Button type="primary" shape="circle" icon="edit" size="small"
-                          onClick={() => this.onEditButtonClick(index)}>
-                  </Button>
-                }
+                <Button type="primary" shape="circle" icon="edit" size="small" key={index}
+                        onClick={() => this.onEditButtonClick(record)}>
+                </Button>
                 <Popconfirm title="确认删除？" onConfirm={() => this.HandleDelete(record.id)}>
                   <Button type="primary" shape="circle" icon="delete" size="small"></Button>
                 </Popconfirm>
@@ -186,13 +126,10 @@ class MatterTable extends React.Component {
 
     this.state = {
       columns: this.columns.filter(item => item.visible!==false),
-      editable: {
-        global: -1,
-        status: 'normal',
-        ...this.dataIndex
-      },
       indeterminate: true,
       checkAll: false,
+      updateModalVisible: false,
+      ChooseItemList: null,
     }
 
   }
@@ -206,60 +143,29 @@ class MatterTable extends React.Component {
     })
   }
 
-  onEditButtonClick (index) {
-    const { editable } = this.state;
-    let newEditable = { global: index, status: 'normal' };
-    Object.keys(editable).forEach((item) => {
-      if (item!=='status')
-        newEditable = { ...newEditable, [item]: index };
-    });
-    this.setState({ editable: newEditable });
+  onEditButtonClick (record) {
+    this.setState({
+      updateModalVisible: true,
+      ChooseItemList: record,
+    })
   }
 
-  onEdit (index, dataIndex) {
-    this.setState({ editable: { ...this.state.editable, [dataIndex]: index } })
+  onModalCancel () {
+    this.setState({
+      updateModalVisible: false,
+      ChooseItemList: null,
+    })
   }
 
-  editDone (index, type) {
-    const { editable } = this.state;
-    let newEditable = { global: -1, status: type };
-    Object.keys(editable).forEach((item) => {
-      if (item!=='status' && item!=='global')
-        newEditable = { ...newEditable, [item]: -1 };
-    });
-
-    this.setState({ editable: newEditable }, () => {
-      newEditable.status = 'normal';
-    });
-  }
-
-  onChange (value, index, dataIndex, type = 'single') {
-    const { dispatch, dataSource } =this.props,
-      { editable }=this.state;
-    //单个check
-    if (type==='single') {
-      //如果全部的值都等于-1，则设置全部-1，使保存按钮变成修改按钮
-      let NeedToSet = [];
-      Object.keys(editable).forEach(item => {
-        if (item!=='status' && item!=='global')
-          if (item===dataIndex)
-            NeedToSet.push(-1);
-          else
-            NeedToSet.push(editable[item])
-      })
-      NeedToSet = NeedToSet.every(item => item=== -1);
-      if (NeedToSet)
-        this.setState({ editable: { ...this.state.editable, [dataIndex]: -1, global: -1 } });
-      else
-        this.setState({ editable: { ...this.state.editable, [dataIndex]: -1 } });
-    }
-    //先获取到旧的值
-    const oldValue = dataSource[index][dataIndex],
-      id = dataSource[index]['id'];
-    if (oldValue!==value) {
-      console.log(oldValue + '-->' + value);
-      dispatch({ type: 'Inventory/Matter/saveValue', payload: { value: value, id: id, dataIndex: dataIndex } });
-    }
+  handleSaveItemList (values) {
+    this.props.dispatch({
+      type: 'Inventory/Matter/saveData',
+      payload: {
+        ItemList: [values]
+      },
+      method: 'update'
+    })
+    this.onModalCancel();
   }
 
   handleCheckBoxChange (dataIndex, checked) {
@@ -292,6 +198,53 @@ class MatterTable extends React.Component {
     });
   }
 
+  onTagClose (label) {
+    this.props.dispatch({
+      type: 'Inventory/Matter/closeQuery',
+      payload: label,
+    })
+  }
+
+  makeTag (value, key, label) {
+    return (
+      <Tag key={key} closable onClose={() => this.onTagClose(key)}>{`${label}：${value}`}</Tag>
+    )
+  }
+
+  makeAlertTag () {
+    const query = this.props.query[0];
+    let arr = [];
+    for (let o in query) {
+      if (query[o]) {
+        switch (o) {
+          case 'BRAND':
+            arr.push(this.makeTag(query[o], o, '品牌'));
+            break;
+          case 'ITEM':
+            arr.push(this.makeTag(query[o], o, '物料编码'));
+            break;
+          case 'ITEM_DESC':
+            arr.push(this.makeTag(query[o], o, '物料名称'));
+            break;
+          case 'ITEM_TYPE':
+            arr.push(this.makeTag(query[o], o, '物料类型'));
+            break;
+          case 'ProductFactory':
+            arr.push(this.makeTag(query[o], o, '生产厂家'));
+            break;
+          case 'SQEC':
+            arr.push(this.makeTag(query[o], o, '规格'));
+            break;
+          case 'SUPPLIER' :
+            arr.push(this.makeTag(query[o], o, '供应商'));
+            break;
+
+        }
+      }
+    }
+    return arr;
+  }
+
   render () {
     return (
       <div>
@@ -305,6 +258,12 @@ class MatterTable extends React.Component {
           loading={this.props.loading}
           title={() =>
             <div className={styles.titleRight}>
+              {
+                this.makeAlertTag().length===0 ? '' :
+                  <Alert message={this.makeAlertTag()}
+                         className={styles.AlertLeft}
+                  />
+              }
               <Popover trigger="click" placement="leftBottom"
                        title={(
                          <Checkbox
@@ -358,10 +317,19 @@ class MatterTable extends React.Component {
               >
                 <Button type="primary" icon="search" className={styles.searchButton}>高级检索</Button>
               </Popover>
+
             </div>
           }
         >
         </Table>
+        <ItemListModal
+          title="修改物料"
+          visible={this.state.updateModalVisible}
+          ItemList={this.state.ChooseItemList}
+
+          onModalCancel={this.onModalCancel}
+          onOk={this.handleSaveItemList}
+        />
       </div>
     )
   }
