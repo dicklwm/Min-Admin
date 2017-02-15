@@ -1,0 +1,8 @@
+
+:global .ant-card-head {
+  overflow: hidden;
+}
+
+:global .ant-card-body {
+  transition: all .3s;
+}

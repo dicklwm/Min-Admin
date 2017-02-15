@@ -14,6 +14,10 @@ module.exports = [
         key: 'matter',
         name: '物料主文件'
       },
+      {
+        key: 'entry',
+        name: '入库单'
+      },
     ]
   },
   {

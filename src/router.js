@@ -48,7 +48,10 @@ function RouterConfig ({ history, app }) {
 
         makeRoute('inventory/matter',true),
 
+        makeRoute('inventory/entry',true),
+
         makeRoute('workflow/definition'),
+
       ],
     },
   ];
