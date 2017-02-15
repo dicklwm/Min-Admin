@@ -130,6 +130,7 @@ export default {
             payload: res.data.data,
           })
         }
+        message.success('保存成功');
       } else {
         message.error(res.data.msg);
       }
@@ -143,6 +144,7 @@ export default {
           type: 'deleteDataReducer',
           payload: payload.id,
         })
+        message.success('删除成功');
       }
     },
 

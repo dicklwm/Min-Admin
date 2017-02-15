@@ -19,74 +19,26 @@ class MatterTable extends React.Component {
         {
           title: '物料编码', dataIndex: 'ITEM', key: 'ITEM', width: 180,
           sorter: ({ ITEM:a }, { ITEM:b }) => a ? a.localeCompare(b) : -1,
-          render: (text, record, index) => (
-            <Tooltip title={text || ''} trigger="hover">
-              {text}
-            </Tooltip>
-          )
         },
         {
           title: '物料名称', dataIndex: 'ITEM_DESC', key: 'ITEM_DESC', width: 180,
           sorter: ({ ITEM_DESC:a }, { ITEM_DESC:b }) => a ? a.localeCompare(b) : -1,
-          render: (text, record, index) => (
-            <Tooltip title={text || ''} trigger="hover">
-              {text}
-            </Tooltip>
-          )
         },
         {
           title: '物料类型', dataIndex: 'ITEM_TYPE', key: 'ITEM_TYPE', width: 180,
           sorter: ({ ITEM_TYPE:a }, { ITEM_TYPE:b }) => a ? a.localeCompare(b) : -1,
-          render: (text, record, index) => (
-            <Tooltip title={text || ''} trigger="hover">
-              {text}
-            </Tooltip>
-          )
         },
         {
           title: '单位', dataIndex: 'UM', key: 'UM', width: 180,
           sorter: ({ UM:a }, { UM:b }) => a ? a.localeCompare(b) : -1,
-          render: (text, record, index) => (
-            <Tooltip title={text || ''} trigger="hover">
-              {text}
-            </Tooltip>
-          )
         },
         {
           title: '规格', dataIndex: 'SQEC', key: 'SQEC', width: 180,
           sorter: ({ SQEC:a }, { SQEC:b }) => a ? a.localeCompare(b) : -1,
-          render: (text, record, index) => (
-            <Tooltip title={text || ''} trigger="hover">
-              {text}
-            </Tooltip>
-          )
         },
         {
           title: '供应商', dataIndex: 'SUPPLIER', key: 'SUPPLIER', width: 280,
           sorter: ({ SUPPLIER:a }, { SUPPLIER:b }) => a ? a.localeCompare(b) : -1,
-          render: (text, record, index) => (
-            <Tooltip title={text || ''} trigger="hover">
-              {text}
-            </Tooltip>
-          )
-        },
-        {
-          title: '品牌', dataIndex: 'BRAND', key: 'BRAND', width: 180, visible: false,
-          sorter: ({ BRAND:a }, { BRAND:b }) => a ? a.localeCompare(b) : -1,
-          render: (text, record, index) => (
-            <Tooltip title={text || ''} trigger="hover">
-              {text}
-            </Tooltip>
-          )
-        },
-        {
-          title: '生产厂家', dataIndex: 'ProductFactory', key: 'ProductFactory', width: 180,
-          sorter: ({ ProductFactory:a }, { ProductFactory: b }) => a ? a.localeCompare(b) : -1,
-          render: (text, record, index) => (
-            <Tooltip title={text || ''} trigger="hover">
-              {text}
-            </Tooltip>
-          )
         },
         {
           title: '编制日期', dataIndex: 'ITEM_DATE', key: 'ITEM_DATE', width: 240,
@@ -98,10 +50,39 @@ class MatterTable extends React.Component {
           )
         },
         {
+          title: '品牌', dataIndex: 'BRAND', key: 'BRAND', width: 180, visible: false,
+          sorter: ({ BRAND:a }, { BRAND:b }) => a ? a.localeCompare(b) : -1,
+        },
+        {
+          title: '生产厂家', dataIndex: 'ProductFactory', key: 'ProductFactory', width: 180, visible: false,
+          sorter: ({ ProductFactory:a }, { ProductFactory: b }) => a ? a.localeCompare(b) : -1,
+        },
+        {
+          title: '提前期', dataIndex: 'LT', key: 'LT', width: 180, visible: false,
+          sorter: ({ LT:a }, { LT: b }) => a ? a.localeCompare(b) : -1,
+        },
+        {
+          title: '材质', dataIndex: 'MATERIAL_QUALITY', key: 'MATERIAL_QUALITY', width: 180, visible: false,
+          sorter: ({ MATERIAL_QUALITY:a }, { MATERIAL_QUALITY: b }) => a ? a.localeCompare(b) : -1,
+        },
+        {
+          title: '购置代码', dataIndex: 'MB', key: 'MB', width: 180, visible: false,
+          sorter: ({ MB:a }, { MB: b }) => a ? a.localeCompare(b) : -1,
+        },
+        {
+          title: 'ABC码', dataIndex: 'ABC_CODE', key: 'ABC_CODE', width: 180, visible: false,
+          sorter: ({ ABC_CODE:a }, { ABC_CODE: b }) => a ? a.localeCompare(b) : -1,
+        },
+        {
+          title: '备注', dataIndex: 'REP', key: 'REP', width: 180, visible: false,
+          sorter: ({ REP:a }, { REP: b }) => a ? a.localeCompare(b) : -1,
+        },
+
+        {
           title: '操作',
           key: 'action',
-          width: 100,
-          fixed: 'right',
+          width: 80,
+          fixed: this.props.isNavbar ? 'right' : null,
           render: (text, record, index) => {
             return (
               <div>
@@ -253,7 +234,7 @@ class MatterTable extends React.Component {
           dataSource={this.props.dataSource}
           rowKey="id"
           key="MatterTable"
-          scroll={{ x: 1300 }}
+          scroll={{ x: this.props.isNavbar ? 768 : 1300 }}
           pagination={false}
           loading={this.props.loading}
           title={() =>
@@ -299,14 +280,7 @@ class MatterTable extends React.Component {
                 <Button>列表选项</Button>
               </Popover>
               <Popover trigger="hover" placement="leftBottom"
-                       title={
-                         <div>
-                           <span>高级检索</span>
-                           <div style={{ float: 'right' }}>
-
-                           </div>
-                         </div>
-                       }
+                       title='高级检索'
                        content={
                          <QueryForm
                            query={this.props.query}

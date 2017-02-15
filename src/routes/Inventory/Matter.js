@@ -6,7 +6,7 @@ import UploadFile from '../../components/common/UploadFile';
 import MatterTable from '../../components/Inventory/Matter/MatterTable';
 import ItemListModal from '../../components/Inventory/Matter/ItemListModal';
 
-function Matter ({ columns, ItemList, dispatch, loading, pagination, ItemType, BrandType, ProductFactory, ItemClass, query }) {
+function Matter ({ columns, ItemList, dispatch, loading, pagination, ItemType, BrandType, ProductFactory, ItemClass, query, isNavbar }) {
 
   function handlePageChange (current) {
     dispatch({
@@ -34,7 +34,7 @@ function Matter ({ columns, ItemList, dispatch, loading, pagination, ItemType, B
       payload: {
         ItemList: [values]
       },
-      method:'new'
+      method: 'new'
     })
   }
 
@@ -65,7 +65,7 @@ function Matter ({ columns, ItemList, dispatch, loading, pagination, ItemType, B
       <div className={styles.tableArea}>
         <MatterTable columns={columns} dataSource={ItemList} dispatch={dispatch} loading={loading}
                      ItemType={ItemType} BrandType={BrandType} ProductFactory={ProductFactory}
-                     ItemClass={ItemClass} onOk={handleQuery} query={query}
+                     ItemClass={ItemClass} onOk={handleQuery} query={query} isNavbar={isNavbar}
         />
         <Pagination pageSize={pagination.pageSize} current={pagination.current} showSizeChanger
                     total={pagination.total}
@@ -90,6 +90,7 @@ function mapStateToProps (state) {
     ProductFactory: matter.ProductFactory,
     ItemClass: matter.ItemClass,
     query: matter.query,
+    isNavbar: state.app.isNavbar,
   };
 }
 

@@ -46,7 +46,7 @@ function QueryForm ({ onOk, onClear, form }) {
         {makeFormItem('生产厂家', 'ProductFactory')}
         {makeFormItem('品牌', 'BRAND')}
         <Col style={{ float: 'right' }}>
-          <Button icon="close" onClick={onClear}>清空</Button>
+          <Button icon="close" onClick={onClear} style={{ marginRight: '12px' }}>清空</Button>
           <Button type="primary" icon="check" onClick={okHandler}>确认</Button>
         </Col>
       </Row>

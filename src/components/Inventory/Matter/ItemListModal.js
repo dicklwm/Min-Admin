@@ -40,11 +40,11 @@ class ItemListModal extends React.Component {
         values['ProductFactory'] = values['ProductFactory'] && values['ProductFactory'].label;
         values['CLIENT'] = values['CLIENT'] && values['CLIENT'].label;
         values['ITEM_TYPE'] = values['ITEM_TYPE'] && values['ITEM_TYPE'][1];
-        values['ITEM_DATE'] = values['ITEM_DATE'] && values['ITEM_DATE'].format('YYYY-MM-DD HH:mm:ss');
+        values['ITEM_DATE'] = values['ITEM_DATE'] && values['ITEM_DATE'].format('YYYY-M-D HH:mm:ss');
 
         onOk(values);
-        this.props.form.resetFields();
         this.hideModelHandler();
+        this.props.form.resetFields();
       }
     });
   };
@@ -206,7 +206,7 @@ class ItemListModal extends React.Component {
                     getFieldDecorator('ITEM_DATE', {
                       initialValue: moment(new Date())
                     })(
-                      <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{ display: "block" }}/>
+                      <DatePicker showTime format="YYYY-M-D HH:mm:ss" style={{ display: "block" }}/>
                     )
                   }
                 </FormItem>
