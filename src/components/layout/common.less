@@ -5,33 +5,30 @@ body {
 }
 // scrollbar
 
+//转角位
 ::-webkit-scrollbar-corner {
   background-color: transparent;
 }
-
+//滚动条轨道两端的按钮
 ::-webkit-scrollbar-button {
   width: 0;
   height: 0;
   display: none;
 }
 
+//拖动条
 ::-webkit-scrollbar-thumb {
-  width: 2px;
-  background-color: rgba(0,0,0,.2);
-  border-radius: 2px;
+  background-color: #cccccc;
+  border-radius: 10px;
+  &:hover{
+    background-color: #bcbcbc;
+  }
 }
 
+//整体
 ::-webkit-scrollbar {
-  width: 2px;
-  height: 2px;
-}
-
-::-webkit-scrollbar-track {
-  width: 5px;
-}
-
-::-webkit-scrollbar:hover {
-  background-color: transparent;
+  width: 10px;
+  height: 10px;
 }
 
 :global .ant-breadcrumb {

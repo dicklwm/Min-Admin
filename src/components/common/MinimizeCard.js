@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './MinimizeCard.css';
-import { Card, Button } from 'antd';
+import { Card, Button, Tooltip } from 'antd';
 
 class MinimizeCard extends React.Component {
   constructor (props) {
@@ -8,22 +8,34 @@ class MinimizeCard extends React.Component {
     this.state = {
       isMinus: false,
     }
+
   }
 
   render () {
-    const { title, children, width, bodyOption }=this.props;
+    const { title, children, width, bodyOption, loading }=this.props;
     return (
       <Card
         title={title}
-        extra={ this.state.isMinus ?
-          <Button icon="plus" size="small" onClick={() => {
-            this.setState({ isMinus: false })
-          }}/> :
-          <Button icon="minus" size="small" onClick={() => {
-            this.setState({ isMinus: true })
-          }}/>
+        extra={
+          <div>
+            {this.props.extra}
+            {
+              this.state.isMinus ?
+                <Tooltip title="显示">
+                  <Button icon="down" onClick={() => {
+                    this.setState({ isMinus: false })
+                  }}/>
+                </Tooltip> :
+                <Tooltip title="隐藏">
+                  <Button icon="up" onClick={() => {
+                    this.setState({ isMinus: true })
+                  }}/>
+                </Tooltip>
+            }
+          </div>
         }
         style={{ width: width }}
+        loading={loading}
         bodyStyle={this.state.isMinus ? { ...bodyOption, display: 'none' } : { ...bodyOption }}
       >
         {children}

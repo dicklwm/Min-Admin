@@ -8,3 +8,12 @@ export async function getEntry (params) {
     body:  JSON.stringify(params)
   })
 }
+
+
+export async function getEntryDetail (params) {
+  return request('/api/inventory/getEntryDetail', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:  JSON.stringify(params)
+  })
+}

@@ -4,6 +4,8 @@ export default {
   namespace: 'Inventory/Entry',
   state: {
     IinventH: [],
+    IinventHDetail: {},
+    IinventD: [],
     pagination: {
       current: 1,
       total: 0,
@@ -12,12 +14,14 @@ export default {
     query: [{
       BILL_NO: null,
       WRITER: null,
+      RELATIVE_BILL: null,
+      Date: [null, null],
       StartDate: null,
       EndDate: null,
     }],
   },
   effects: {
-    *fetch({}, { select, call, put }){
+    *fetchH({}, { select, call, put }){
       const pagination = yield select(state => state['Inventory/Entry'].pagination);
       const query = yield select(state => state['Inventory/Entry'].query);
       const res = yield call(EntryService.getEntry, { ...pagination, query });
@@ -28,6 +32,27 @@ export default {
         })
       }
     },
+
+    *RowClick({ payload }, { call, put }){
+      const res = yield call(EntryService.getEntryDetail, { id: payload });
+      if (res.data.success) {
+        yield put({
+          type: 'fetchDetail',
+          payload: res.data.data,
+        })
+      }
+    },
+
+    *changePage({}, { put }){
+      yield put({ type: 'fetchH' });
+    },
+    *queryData({}, { put }){
+      yield put({ type: 'fetchH' });
+    },
+    *clearQuery({}, { put }){
+      yield put({ type: 'fetchH' });
+    },
+
   },
   reducers: {
     fetchData(state, action){
@@ -37,6 +62,12 @@ export default {
         pagination: { ...state.pagination, total: action.payload.total },
       }
     },
+    fetchDetail(state, action){
+      return {
+        ...state,
+        IinventD: action.payload.IinventD,
+      }
+    },
     changePage(state, action){
       const { current, pageSize } = action.payload;
       return {
@@ -44,13 +75,39 @@ export default {
         pagination: { ...state.pagination, current: current, pageSize: pageSize },
       }
     },
+    RowClick(state, action){
+      return {
+        ...state,
+        IinventHDetail: state.IinventH.find(item => item.id===action.payload)
+      }
+    },
+    queryData(state, action){
+      return {
+        ...state,
+        query: action.payload.query
+      }
+    },
+    clearQuery(state){
+      return {
+        ...state,
+        query: [{
+          BILL_NO: null,
+          WRITER: null,
+          Date: [null, null],
+          RELATIVE_BILL: null,
+          StartDate: null,
+          EndDate: null,
+        }],
+      }
+    },
+
   },
   subscriptions: {
     setup({ dispatch, history }){
       history.listen(({ pathname }) => {
           if (pathname==='/inventory/entry') {
             dispatch({
-              type: 'fetch',
+              type: 'fetchH',
             });
           }
         }

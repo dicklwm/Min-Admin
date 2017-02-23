@@ -7,31 +7,34 @@ class RowTable extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      selectedRowKey: '',
+      selectedRowIndex: 0,
     }
   }
 
-  handleRowClick (record) {
+  handleRowClick (record, index) {
     const { onRowClick, rowKey }=this.props;
-    this.setState({ selectedRowKey: record[rowKey] });
-    onRowClick && onRowClick(record);
+    this.setState({ selectedRowIndex: record[rowKey] });
+    onRowClick && onRowClick(record, index);
   }
 
   render () {
-    const { columns, dataSource, rowKey, scroll, pageSize, current, total, loading }=this.props;
+    const { columns, dataSource, rowKey, scroll, pageSize, current, total, loading, bordered, onPageChange, onShowSizeChange }=this.props;
     return (
       <div >
-        <Table columns={columns} dataSource={dataSource} rowKey={rowKey} loading={loading}
-               onRowClick={(record) => this.handleRowClick(record)}
-               rowClassName={(record, index) => record[rowKey]===this.state.selectedRowKey ? styles.selectRow : styles.rowHand}
+        <Table columns={columns} dataSource={dataSource}
+               rowKey={rowKey} loading={loading} bordered={bordered}
+               onRowClick={(record, index) => this.handleRowClick(record, index)}
+               rowClassName={(record, index) => record[rowKey]===this.state.selectedRowIndex ? styles.selectRow : styles.rowHand}
                scroll={scroll}
                pagination={false}
         />
         <Pagination
           pageSize={pageSize} current={current} showSizeChanger
           total={total}
-          showTotal={(total, range) => `共${total}条数据`}
           className="ant-table-pagination ant-pagination"
+          onChange={onPageChange}
+          onShowSizeChange={onShowSizeChange}
+
         />
       </div>
     )

@@ -1,11 +1,11 @@
 import React from 'react';
-import ReactDom from 'react-dom';
 import { Table, Button, Popconfirm, Popover, Alert, Checkbox, Tooltip, Tag } from 'antd';
 import styles from './MatterTable.css';
 
 // import EditableCell from '../../common/EditableCell';
 import QueryForm from './QueryForm';
 import ItemListModal from './ItemListModal';
+import ColumnPopover from '../../common/ColumnPopover';
 
 class MatterTable extends React.Component {
 
@@ -13,6 +13,7 @@ class MatterTable extends React.Component {
     super(props);
     this.onModalCancel = this.onModalCancel.bind(this);
     this.handleSaveItemList = this.handleSaveItemList.bind(this);
+    this.handleCheckBoxChange = this.handleCheckBoxChange.bind(this);
 
     this.columns =
       [
@@ -30,15 +31,12 @@ class MatterTable extends React.Component {
         },
         {
           title: '单位', dataIndex: 'UM', key: 'UM', width: 180,
-          sorter: ({ UM:a }, { UM:b }) => a ? a.localeCompare(b) : -1,
         },
         {
           title: '规格', dataIndex: 'SQEC', key: 'SQEC', width: 180,
-          sorter: ({ SQEC:a }, { SQEC:b }) => a ? a.localeCompare(b) : -1,
         },
         {
           title: '供应商', dataIndex: 'SUPPLIER', key: 'SUPPLIER', width: 280,
-          sorter: ({ SUPPLIER:a }, { SUPPLIER:b }) => a ? a.localeCompare(b) : -1,
         },
         {
           title: '编制日期', dataIndex: 'ITEM_DATE', key: 'ITEM_DATE', width: 240,
@@ -51,31 +49,24 @@ class MatterTable extends React.Component {
         },
         {
           title: '品牌', dataIndex: 'BRAND', key: 'BRAND', width: 180, visible: false,
-          sorter: ({ BRAND:a }, { BRAND:b }) => a ? a.localeCompare(b) : -1,
         },
         {
           title: '生产厂家', dataIndex: 'ProductFactory', key: 'ProductFactory', width: 180, visible: false,
-          sorter: ({ ProductFactory:a }, { ProductFactory: b }) => a ? a.localeCompare(b) : -1,
         },
         {
           title: '提前期', dataIndex: 'LT', key: 'LT', width: 180, visible: false,
-          sorter: ({ LT:a }, { LT: b }) => a ? a.localeCompare(b) : -1,
         },
         {
           title: '材质', dataIndex: 'MATERIAL_QUALITY', key: 'MATERIAL_QUALITY', width: 180, visible: false,
-          sorter: ({ MATERIAL_QUALITY:a }, { MATERIAL_QUALITY: b }) => a ? a.localeCompare(b) : -1,
         },
         {
           title: '购置代码', dataIndex: 'MB', key: 'MB', width: 180, visible: false,
-          sorter: ({ MB:a }, { MB: b }) => a ? a.localeCompare(b) : -1,
         },
         {
           title: 'ABC码', dataIndex: 'ABC_CODE', key: 'ABC_CODE', width: 180, visible: false,
-          sorter: ({ ABC_CODE:a }, { ABC_CODE: b }) => a ? a.localeCompare(b) : -1,
         },
         {
           title: '备注', dataIndex: 'REP', key: 'REP', width: 180, visible: false,
-          sorter: ({ REP:a }, { REP: b }) => a ? a.localeCompare(b) : -1,
         },
 
         {
@@ -149,34 +140,10 @@ class MatterTable extends React.Component {
     this.onModalCancel();
   }
 
-  handleCheckBoxChange (dataIndex, checked) {
-    this.columns = this.columns.map(item => {
-      if (item.dataIndex===dataIndex) {
-        checked ?
-          item.visible = true :
-          item.visible = false
-      }
-      return item;
-    });
+  handleCheckBoxChange (columns) {
     this.setState({
-      columns: this.columns.filter(item => item.visible!==false),
-      indeterminate: !!this.columns.length,
-      checkAll: this.columns.length===this.columns.filter(item => item.visible!==false).length,
+      columns: columns,
     })
-  }
-
-  onCheckAllChange (checked) {
-    this.columns = this.columns.map(item => {
-      checked ?
-        item.visible = true :
-        item.visible = false
-      return item;
-    });
-    this.setState({
-      columns: this.columns.filter(item => item.visible!==false),
-      indeterminate: false,
-      checkAll: checked,
-    });
   }
 
   onTagClose (label) {
@@ -245,40 +212,10 @@ class MatterTable extends React.Component {
                          className={styles.AlertLeft}
                   />
               }
-              <Popover trigger="click" placement="leftBottom"
-                       title={(
-                         <Checkbox
-                           indeterminate={this.state.indeterminate}
-                           checked={this.state.checkAll}
-                           onChange={e => this.onCheckAllChange(e.target.checked)}
-                         >
-                           全选
-                         </Checkbox>
-                       )}
-                       content={
-                         (
-                           <ul>
-                             {this.columns.map((item, index) => {
-                               return (
-                                 <li className={styles.checkboxLi} key={index}>
-                                   <Checkbox defaultChecked={item.visible && item.visible===false}
-                                             checked={!!this.state.columns.find(
-                                               showColumn => showColumn.dataIndex===item.dataIndex)
-                                             }
-                                             onChange={(e) => this.handleCheckBoxChange(item.dataIndex, e.target.checked)}
-                                             key={index}
-                                   >
-                                     {item.title}
-                                   </Checkbox>
-                                 </li>
-                               )
-                             })}
-                           </ul>
-                         )
-                       }
-              >
-                <Button>列表选项</Button>
-              </Popover>
+              <ColumnPopover
+                onCheckBoxChange={this.handleCheckBoxChange}
+                columns={this.columns}
+              />
               <Popover trigger="hover" placement="leftBottom"
                        title='高级检索'
                        content={

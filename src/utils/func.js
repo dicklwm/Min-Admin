@@ -55,6 +55,13 @@ function makeChildren (fathers, children, fKeyName, fValueName, cKeyName, cValue
 
 }
 
+function makePropsToFields (arr, props) {
+  let obj = {};
+  arr.forEach(item => obj[item] = { value: props[item] });
+  return obj;
+}
+
 module.exports = {
-  makeChildren
+  makeChildren,
+  makePropsToFields
 }
