@@ -8,6 +8,7 @@ import RowTable from '../../components/common/RowTable';
 import ColumnPopover from '../../components/common/ColumnPopover';
 import HeadDataForm from '../../components/Inventory/Entry/HeadDataForm';
 import QueryForm from '../../components/Inventory/Entry/QueryForm';
+import EntryModal from '../../components/Inventory/Entry/EntryModal';
 
 class Entry extends React.Component {
 
@@ -154,30 +155,11 @@ class Entry extends React.Component {
         width: 250,
         visible: false,
       },
-      {
-        title: '操作',
-        width: 80,
-        fixed: 'right',
-        render: (text, record, index) =>
-          <div>
-            <Button type="primary" shape="circle" icon="edit" size="small" key={index}
-                    onClick={() => this.onEditButtonClick(record)}>
-            </Button>
-            <Popconfirm title="确认删除？" onConfirm={() => this.HandleDelete(record.id)}>
-              <Button type="primary" shape="circle" icon="delete" size="small"></Button>
-            </Popconfirm>
-          </div>
-
-      }
     ];
 
     this.state = {
       columns: this.DetailColumns.filter(item => item.visible!==false),
     }
-
-  }
-
-  onEditButtonClick (record) {
 
   }
 
@@ -212,21 +194,25 @@ class Entry extends React.Component {
     })
   }
 
-  handleAddData () {
-    console.log(1);
-  }
-
-  handleQuery (values) {
+  handleQuery = (values) => {
     this.props.dispatch({
       type: 'Inventory/Entry/queryData',
       payload: { query: [values] },
     })
   }
 
-  handleQueryClear () {
+  handleQueryClear = () => {
     this.props.dispatch({
       type: 'Inventory/Entry/clearQuery',
     })
+  }
+
+  handleAddEntry = (values) => {
+    console.log(values);
+  }
+
+  handleUpdateEntry = (values) => {
+    console.log(values);
   }
 
   render () {
@@ -234,18 +220,21 @@ class Entry extends React.Component {
     return (
       <div className={styles.normal}>
         <Row gutter={12}>
-          <Col lg={6} xs={24}>
+          <Col lg={6} xs={24} style={{ marginBottom: '12px' }}>
             <MinimizeCard title="入库单主表"
                           extra={
                             <div style={{ display: 'inline-block' }}>
-                              <Tooltip title="新增">
-                                <Button icon="plus" className={styles.HeadButtonMargin}
-                                        onClick={this.handleAddData}></Button>
-                              </Tooltip>
+
+                              <EntryModal title="新增入库单" onOk={this.handleAddEntry}>
+                                <Tooltip title="新增">
+                                  <Button type="primary" icon="plus" className={styles.HeadButtonMargin}/>
+                                </Tooltip>
+                              </EntryModal>
+
                               <Popover title={<h3>检索</h3>} content={
                                 <QueryForm query={this.props.query}
-                                           onOk={values => this.handleQuery(values)}
-                                           onClear={() => this.handleQueryClear()}
+                                           onOk={this.handleQuery}
+                                           onClear={this.handleQueryClear}
                                            loading={loading}
                                 />
                               }
@@ -280,7 +269,16 @@ class Entry extends React.Component {
           <Col lg={18} xs={24}>
             <Row style={{ marginBottom: 12 }}>
               <Col>
-                <MinimizeCard title="入库单主表详情" loading={loading}>
+                <MinimizeCard title="入库单主表详情" loading={loading}
+                              extra={
+                                <EntryModal title="修改入库单" type="update" IinventD={this.props.IinventD}
+                                            onOk={this.handleUpdateEntry}>
+                                  <Button icon="edit" className={styles.HeadButtonMargin}
+                                          disabled={this.props.IinventHDetail.AUDIT_STATUS==='编制' ? false : true}
+                                  />
+                                </EntryModal>
+                              }
+                >
                   <HeadDataForm
                     data={IinventHDetail}
                   />
@@ -292,9 +290,10 @@ class Entry extends React.Component {
                 <MinimizeCard title="入库单从表"
                               extra={
                                 <ColumnPopover
-                                  onCheckBoxChange={columns => this.setState({ columns: columns })}
+                                  onCheckBoxAndWidthChange={columns => this.setState({ columns: columns })}
                                   columns={this.DetailColumns}
                                   buttonClass={styles.HeadButtonMargin}
+                                  widthChange
                                 />}
                               loading={loading}
                 >

@@ -39,7 +39,7 @@ function HeadDataForm ({ form }) {
           key={item.key}
         >
           {
-            getFieldDecorator(item.key)(<InputTooltip />)
+            getFieldDecorator(item.key)(<InputTooltip disabled/>)
           }
         </FormItem>
       </Col>
@@ -57,7 +57,7 @@ function HeadDataForm ({ form }) {
             label='备注'
           >
             {
-              getFieldDecorator('REF')(<InputTooltip />)
+              getFieldDecorator('REF')(<InputTooltip disabled/>)
             }
           </FormItem>
         </Col>
@@ -69,6 +69,6 @@ function HeadDataForm ({ form }) {
 export default Form.create({
   mapPropsToFields(props) {
     const data = props.data;
-    return makePropsToFields(Fields.map(item => item.key), data);
+    return makePropsToFields(Fields, data);
   }
 })(HeadDataForm);

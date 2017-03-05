@@ -1,4 +1,8 @@
-import EditableCell from '../components/common/EditableCell';
+// import EditableCell from '../components/common/EditableCell';
+import { Input, Form, Select, Col, DatePicker } from 'antd';
+const FormItem = Form.Item;
+const { RangePicker } = DatePicker;
+import moment from 'moment';
 
 // 连字符转驼峰
 String.prototype.hyphenToHump = function () {
@@ -55,13 +59,157 @@ function makeChildren (fathers, children, fKeyName, fValueName, cKeyName, cValue
 
 }
 
-function makePropsToFields (arr, props) {
+/**
+ * 将表单元素转换为props
+ * @param Fields 表单头
+ * @param data 表单值
+ * @return {{}}
+ */
+function makePropsToFields (Fields, data) {
   let obj = {};
-  arr.forEach(item => obj[item] = { value: props[item] });
+  Fields.forEach(item => {
+    switch (item.type || 'text') {
+      case 'text':
+      case 'select':
+        obj[item.key] = { value: data[item.key] }
+        break;
+      case 'datetime':
+      case 'date':
+        obj[item.key] = { value: moment(data[item.key]) }
+        break;
+      default:
+        break;
+
+    }
+  });
   return obj;
+}
+
+function objToItemFields (arr, getFieldDecorator,
+                          globalColLayout = { lg: 8, xs: 24 },
+                          globalFormItemLayout = {
+                            labelCol: { lg: 8, xs: 4 },
+                            wrapperCol: { lg: 16, xs: 20 },
+                          }) {
+  let result = arr.map((item, arrIndex) => {
+    //获取每个项的type，缺省为text
+    let type = item.type || 'text',
+      //获取每项的colLayout
+      colLayout = item.colLayout || globalColLayout,
+      formLayout = item.formLayout || globalFormItemLayout;
+    switch (type) {
+      case 'text':
+        return (
+          <Col key={arrIndex} {...colLayout}>
+            <FormItem label={item.label} {...formLayout}>
+              {getFieldDecorator(item.key, item.option)(
+                <Input disabled={item.disabled} placeholder={item.placeholder}/>
+              )}
+            </FormItem>
+          </Col>
+        )
+      case 'select':
+        const Option = Select.Option;
+        let selectOption = [];
+        //支持调用function获取数据，返回的数据格式需要是{value:'xxx'}
+        if (typeof item.selectOption==='function') {
+          selectOption = item.selectOption();
+        } else {
+          selectOption = item.selectOption;
+        }
+        //遍历数组，生成对应的Option的DOM，value是必填，label不存在时用value代替
+        selectOption = selectOption.map((option, index) =>
+          <Option value={option.value} key={index}>{option.label || option.value}</Option>
+        )
+        console.log(selectOption);
+        return (
+          <Col key={arrIndex} {...colLayout}>
+            <FormItem label={item.label} {...formLayout}>
+              {getFieldDecorator(item.key, item.option)(
+                <Select disabled={item.disabled} placeholder={item.placeholder}
+                        labelInValue={item.labelInValue}
+                        onChange={item.onChange} showSearch={item.showSearch}>
+                  {selectOption}
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+        )
+      case 'datetime':
+        return (
+          <Col key={arrIndex} {...colLayout}>
+            <FormItem label={item.label} {...formLayout}>
+              {getFieldDecorator(item.key, { initialValue: item.defaultValue, ...item.option })(
+                <DatePicker
+                  showTime
+                  format={item.format || "YYYY-MM-DD HH:mm:ss"}
+                  placeholder={item.placeholder}
+                  onChange={item.onChange}
+                />
+              )}
+            </FormItem>
+          </Col>
+        )
+      case 'date':
+        return (
+          <Col key={arrIndex} {...colLayout}>
+            <FormItem label={item.label} {...formLayout}>
+              {getFieldDecorator(item.key, { initialValue: item.defaultValue, ...item.option })(
+                <DatePicker
+                  format={item.format || "YYYY-MM-DD"}
+                  placeholder={item.placeholder}
+                  onChange={item.onChange}
+                />
+              )}
+            </FormItem>
+          </Col>
+        )
+      case 'dateRange':
+        return (
+          <Col key={arrIndex} {...colLayout}>
+            <FormItem label={item.label} {...formLayout}>
+              {getFieldDecorator(item.key, { initialValue: item.defaultValue, ...item.option })(
+                <RangePicker
+                  format={item.format || "YYYY-MM-DD"}
+                  placeholder={item.placeholder}
+                  onChange={item.onChange}
+                />
+              )}
+            </FormItem>
+          </Col>
+        )
+      case 'datetimeRange':
+        return (
+          <Col key={arrIndex} {...colLayout}>
+            <FormItem label={item.label} {...formLayout}>
+              {getFieldDecorator(item.key, { initialValue: item.defaultValue, ...item.option })(
+                <RangePicker
+                  showTime
+                  format={item.format || "YYYY-MM-DD HH:mm:ss"}
+                  placeholder={item.placeholder}
+                  onChange={item.onChange}
+                />
+              )}
+            </FormItem>
+          </Col>
+        )
+
+      case 'number':
+        return '';
+
+      default :
+        break;
+
+    }
+
+  });
+  console.log(result);
+  return result;
+
 }
 
 module.exports = {
   makeChildren,
-  makePropsToFields
+  makePropsToFields,
+  objToItemFields,
 }

@@ -44,4 +44,13 @@ class MinimizeCard extends React.Component {
   }
 }
 
+MinimizeCard.propTypes={
+  title:React.PropTypes.string,
+  children:React.PropTypes.element,
+  width:React.PropTypes.number,
+  bodyOption:React.PropTypes.object,
+  loading:React.PropTypes.bool,
+  extra:React.PropTypes.element,
+}
+
 export default MinimizeCard;

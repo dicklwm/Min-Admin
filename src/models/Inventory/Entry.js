@@ -6,6 +6,7 @@ export default {
     IinventH: [],
     IinventHDetail: {},
     IinventD: [],
+    WarehList: [],
     pagination: {
       current: 1,
       total: 0,
@@ -18,6 +19,7 @@ export default {
       Date: [null, null],
       StartDate: null,
       EndDate: null,
+      AUDIT_STATUS: null,
     }],
   },
   effects: {
@@ -38,6 +40,16 @@ export default {
       if (res.data.success) {
         yield put({
           type: 'fetchDetail',
+          payload: res.data.data,
+        })
+      }
+    },
+
+    *fetchWarehList({}, { call, put }){
+      const res = yield call(EntryService.getWarehList, {});
+      if (res.data.success) {
+        yield put({
+          type: 'fetchWarehListData',
           payload: res.data.data,
         })
       }
@@ -68,6 +80,14 @@ export default {
         IinventD: action.payload.IinventD,
       }
     },
+
+    fetchWarehListData(state, action){
+      return {
+        ...state,
+        WarehList: action.payload.WarehList,
+      }
+    },
+
     changePage(state, action){
       const { current, pageSize } = action.payload;
       return {
@@ -97,6 +117,7 @@ export default {
           RELATIVE_BILL: null,
           StartDate: null,
           EndDate: null,
+          AUDIT_STATUS: null,
         }],
       }
     },
@@ -108,6 +129,9 @@ export default {
           if (pathname==='/inventory/entry') {
             dispatch({
               type: 'fetchH',
+            });
+            dispatch({
+              type: 'fetchWarehList'
             });
           }
         }

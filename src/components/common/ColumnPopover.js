@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './ColumnPopover.css';
-import { Popover, Checkbox, Button } from 'antd';
+import { Popover, Checkbox, Button, InputNumber } from 'antd';
 
 class ColumnPopover extends React.Component {
 
@@ -14,7 +14,7 @@ class ColumnPopover extends React.Component {
   }
 
   handleCheckBoxChange (dataIndex, checked) {
-    const { onCheckBoxChange }=this.props;
+    const { onCheckBoxAndWidthChange }=this.props;
     //先找到对应的index
     const index = this.columns.findIndex(item => item.dataIndex===dataIndex);
     //修改状态
@@ -22,7 +22,7 @@ class ColumnPopover extends React.Component {
     //获取新的应该显示的列
     const newColumns = this.columns.filter(item => item.visible!==false);
     //调props
-    onCheckBoxChange(newColumns);
+    onCheckBoxAndWidthChange && onCheckBoxAndWidthChange(newColumns);
     this.setState({
       indeterminate: !!newColumns.length,
       checkAll: this.columns.length===newColumns.length,
@@ -30,17 +30,29 @@ class ColumnPopover extends React.Component {
   }
 
   handleCheckAllChange (checked) {
-    const { onCheckBoxChange }=this.props;
+    const { onCheckBoxAndWidthChange }=this.props;
     this.columns = this.columns.map(item => {
       item.visible = checked;
       return item;
     });
     const newColumns = this.columns.filter(item => item.visible!==false);
-    onCheckBoxChange(newColumns);
+    onCheckBoxAndWidthChange && onCheckBoxAndWidthChange(newColumns);
     this.setState({
       indeterminate: false,
       checkAll: checked,
     });
+  }
+
+  handleChangeWidth (dataIndex, value) {
+    const { onCheckBoxAndWidthChange }=this.props;
+    //先找到对应的index
+    const index = this.columns.findIndex(item => item.dataIndex===dataIndex);
+    //修改宽度
+    this.columns[index].width = value;
+    //获取新的应该显示的列
+    const newColumns = this.columns.filter(item => item.visible!==false);
+    //调props
+    onCheckBoxAndWidthChange && onCheckBoxAndWidthChange(newColumns);
   }
 
   render () {
@@ -67,6 +79,13 @@ class ColumnPopover extends React.Component {
                                      key={index}
                            >
                              {item.title}
+                             {!!this.props.widthChange ?
+                               <InputNumber value={item.width} min={0}
+                                            style={{ marginLeft: '12px', width: '60px' }}
+                                            onChange={value => this.handleChangeWidth(item.dataIndex, value)}
+                               /> : ''
+                             }
+
                            </Checkbox>
                          </li>
                        )
@@ -75,10 +94,20 @@ class ColumnPopover extends React.Component {
                  )
                }
       >
-        <Button className={this.props.buttonClass}>{this.props.children || '列表选项'}</Button>
+        <Button className={this.props.buttonClass}
+                style={this.props.buttonStyle}>{this.props.children || '列表选项'}</Button>
       </Popover>
     )
   }
+}
+
+ColumnPopover.propTypes = {
+  buttonClass: React.PropTypes.string,
+  buttonStyle: React.PropTypes.object,
+  children: React.PropTypes.element,
+  columns: React.PropTypes.array,
+  onCheckBoxAndWidthChange: React.PropTypes.func,
+  widthChange:React.PropTypes.bool,
 }
 
 export default ColumnPopover;

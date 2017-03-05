@@ -1,9 +1,10 @@
 import React from 'react';
-import { Form, Input, Row, Col, Button, DatePicker } from 'antd';
+import { Form, Input, Row, Col, Button, DatePicker, Select } from 'antd';
 // import moment from 'moment';
 
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
+const Option = Select.Option;
 
 const Fields = [
   { label: '单据号', key: 'BILL_NO' },
@@ -11,6 +12,7 @@ const Fields = [
   { label: '相关单据号', key: 'RELATIVE_BILL' },
   { label: '开始日期', key: 'StartDate' },
   { label: '结束日期', key: 'EndDate' },
+  { label: '审核状态', key: 'AUDIT_STATUS' },
 ];
 
 function QueryForm ({ onOk, onClear, form, loading }) {
@@ -48,6 +50,22 @@ function QueryForm ({ onOk, onClear, form, loading }) {
   return (
     <Form onSubmit={okHandler} style={{ maxWidth: 300 }}>
       <Row gutter={20}>
+        <Col {...ColLayout}>
+          <FormItem
+            {...formItemLayout}
+            label={Fields[5].label}
+          >
+            {
+              getFieldDecorator(Fields[5].key)(
+                <Select getPopupContainer={triggerNode => triggerNode.parentNode} placeholder="请选择审核状态">
+                  <Option value="编制">编制</Option>
+                  <Option value="审核中">审核中</Option>
+                  <Option value="已审核">已审核</Option>
+                </Select>
+              )
+            }
+          </FormItem>
+        </Col>
 
         {makeFormItem(Fields[0].label, Fields[0].key)}
         {makeFormItem(Fields[1].label, Fields[1].key)}
@@ -91,6 +109,7 @@ export default Form.create({
       Date: { value: query.Date },
       StartDate: { value: query.StartDate },
       EndDate: { value: query.EndDate },
+      AUDIT_STATUS: { value: query.AUDIT_STATUS },
     }
   }
 })(QueryForm);
