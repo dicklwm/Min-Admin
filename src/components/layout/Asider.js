@@ -1,14 +1,12 @@
 import React from 'react'
-import { Icon, Switch } from 'antd'
 import styles from './main.less'
 import config  from '../../utils/config';
 import Menus from './Menus';
 
-function Asider ({ siderFold, darkTheme, location, changeTheme }) {
+function Asider ({ siderFold, location }) {
 
   const menusProps = {
     siderFold,
-    darkTheme,
     location
   }
   return (
@@ -18,14 +16,6 @@ function Asider ({ siderFold, darkTheme, location, changeTheme }) {
         {siderFold ? '' : <span>{config.logoText}</span>}
       </div>
       <Menus {...menusProps}/>
-      {
-        !siderFold ?
-          <div className={styles.switchtheme}>
-            <span><Icon type='bulb'/>切换主题</span>
-            <Switch onChange={changeTheme} defaultChecked={darkTheme} checkedChildren='黑' unCheckedChildren='白'/>
-          </div>
-          : ''
-      }
     </div>
 
   )

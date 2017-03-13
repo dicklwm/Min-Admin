@@ -47,7 +47,6 @@ function App ({ children, location, dispatch, loading, app }) {
           <Index
             headerProps={headerProps}
             siderProps={siderProps}
-            darkTheme={darkTheme}
             siderFold={siderFold}
             isNavbar={isNavbar}
             children={children}

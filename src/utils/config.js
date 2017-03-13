@@ -6,7 +6,7 @@ module.exports = {
   logoText: 'Min-Admin',
   needLogin: false,
   defaultSelectMenu:'home',
-  needBread:false,
+  needBread:true,
   needFooter:true,
   v3Address:"http://www.mitarl.com:8080",
 }

@@ -60,113 +60,9 @@
     }
   }
 
-  .sider {
-    width: 224px;
-    background: #3e3e3e;
-    position: absolute;
-    overflow: visible;
-    padding-bottom: 24px;
-    height: 100vh;
-    transition: @transition-ease-out;
-    box-shadow: @shadow-1;
-    z-index: 1000;
-    color: #999;
 
-    &.light {
-      background: #fff;
 
-      .switchtheme {
-        background: #fff;
-        border-top: solid 1px #f8f8f8;
-      }
-    }
-
-    .logo {
-      text-align: center;
-      height: 40px;
-      line-height: 40px;
-      cursor: pointer;
-      margin: 28px 0;
-      transition: @transition-ease-out;
-      overflow: hidden;
-
-      img {
-        width: 40px;
-        height: 40px;
-        margin-right: 8px;
-        transition: @transition-ease-out;
-        border-radius: 50%;
-      }
-
-      span {
-        vertical-align: text-bottom;
-        font-size: 16px;
-        text-transform: uppercase;
-        display: inline-block;
-      }
-
-      .anticon {
-        transition: @transition-ease-out;
-      }
-    }
-
-    //.siderMenu {
-    //  position: absolute;
-    //  width: 100%;
-    //  max-height: ~"calc(100% - 88px)";
-    //  overflow-y: scroll;
-    //  overflow-x: hidden;
-    //
-    //  &::-webkit-scrollbar-thumb {
-    //    display: none;
-    //  }
-    //}
-
-    .switchtheme {
-      width: 100%;
-      position: absolute;
-      bottom: 0;
-      height: 48px;
-      background-color: @dark-half;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 16px 0 24px;
-      overflow: hidden;
-      z-index: 1000;
-
-      span {
-        white-space: nowrap;
-        overflow: hidden;
-      }
-
-      :global {
-        .anticon {
-          min-width: 14px;
-          margin-right: 8px;
-          font-size: 14px;
-        }
-      }
-    }
-
-    :global {
-      .ant-menu-dark,
-      .ant-menu-dark .ant-menu-sub {
-        color: #999;
-      }
-
-      .ant-menu {
-        transition: @transition-ease-out;
-
-        .ant-menu-item,
-        .ant-menu-submenu-title {
-          overflow: hidden;
-          white-space: normal;
-        }
-      }
-    }
-  }
-
+  //头部菜单
   .header {
     :global .ant-menu-horizontal {
       & > .ant-menu-submenu {
@@ -176,7 +72,7 @@
     }
     box-shadow: @shadow-2;
     position: relative;
-
+    //顶部菜单的左边的缩进按钮
     .siderbutton {
       height: 47px;
       width: 47px;
@@ -185,7 +81,6 @@
       font-size: 18px;
       cursor: pointer;
       position: absolute;
-      transition: @transition-ease-in;
 
       &:hover {
         color: @primary-color;
@@ -194,6 +89,7 @@
     }
   }
 
+  //面包屑
   .bread {
     height: 40px;
     line-height: 40px;
@@ -201,6 +97,7 @@
     margin-bottom: -24px;
   }
 
+  //主窗体内容
   .main {
     margin-left: 224px;
     overflow: auto;
@@ -239,6 +136,7 @@
     }
   }
 
+  //底部页脚
   .footer {
     height: 48px;
     line-height: 48px;
@@ -251,58 +149,164 @@
   }
 }
 
-:global .ant-menu-dark {
-  color: #999;
-  background-color: #3e3e3e;
+//左边的sider
+.sider {
+  width: @sider-width;
+  background: @sider-background-color;
+  position: absolute;
+  overflow: visible;
+  padding-bottom: 24px;
+  height: @sider-height;
+  transition: @transition-ease-out;
+  box-shadow: @shadow-1;
+  z-index: 1000;
+  color: @sider-color;
 
-  .ant-menu-submenu-title:hover,
+  //标志
+  .logo {
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    cursor: pointer;
+    margin: 28px 0;
+    transition: @transition-ease-out;
+    overflow: hidden;
+    //标志的图片
+    img {
+      width: 40px;
+      height: 40px;
+      margin-right: 8px;
+      transition: @transition-ease-out;
+      border-radius: 50%;
+    }
+    //标志的文字
+    span {
+      vertical-align: text-bottom;
+      font-size: 16px;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+
+    .anticon {
+      transition: @transition-ease-out;
+    }
+  }
+
+  /*.siderMenu {
+  //  position: absolute;
+  //  width: 100%;
+  //  max-height: ~"calc(100% - 88px)";
+  //  overflow-y: scroll;
+  //  overflow-x: hidden;
+  //
+  //  &::-webkit-scrollbar-thumb {
+  //    display: none;
+  //  }
+  //}
+
+  //.switchtheme {
+  //  width: 100%;
+  //  position: absolute;
+  //  bottom: 0;
+  //  height: 48px;
+  //  background-color: @dark-half;
+  //  display: flex;
+  //  justify-content: space-between;
+  //  align-items: center;
+  //  padding: 0 16px 0 24px;
+  //  overflow: hidden;
+  //  z-index: 1000;
+  //
+  //  span {
+  //    white-space: nowrap;
+  //    overflow: hidden;
+  //  }
+  //
+  //  :global {
+  //    .anticon {
+  //      min-width: 14px;
+  //      margin-right: 8px;
+  //      font-size: 14px;
+  //    }
+  //  }
+  //}
+
+  //:global {
+  //  .ant-menu-dark,
+  //  .ant-menu-dark .ant-menu-sub {
+  //    //color: #999;
+  //  }
+  //
+  //  .ant-menu {
+  //    transition: @transition-ease-out;
+  //
+  //    .ant-menu-item,
+  //    .ant-menu-submenu-title {
+  //      overflow: hidden;
+  //      white-space: normal;
+  //    }
+  //  }
+  //}
+  */
+}
+
+//重写  菜单的黑色风格
+:global .ant-menu-dark {
+  color: @menu-dark-color;
+  background: @sider-background-color;
+
+  //悬停在title或者li上时
   .ant-menu-submenu:hover {
     color: @primary-color;
   }
-
+  //子菜单   ul
   .ant-menu-sub {
-    color: #999;
+    color: @menu-dark-color;
   }
-
+  //被选中的子菜单  subitem
   .ant-menu-submenu-selected {
-    color: @primary-color;
+    color: @menu-dark-color-select;
 
     &:not(.ant-menu-submenu-open) {
-      background-color: @dark-half;
+      background-color: @menu-dark-background-color-select;
     }
   }
-
+  //所有的菜单
   .ant-menu-item,
   .ant-menu-submenu-title {
+    background-color: @sider-background-color;
+    //菜单底下的 a标签
     & > a {
-      color: #999;
+      color: @menu-dark-color;
     }
-
+    //悬停菜单时的a
     &:hover > a {
-      color: @primary-color;
+      color: @menu-dark-color-hover;
     }
   }
 
+  //
   &.ant-menu-inline {
     .ant-menu-item-selected {
-      background-color: @dark-half;
+      background-color: @menu-dark-background-color-select;
     }
   }
 
   .ant-menu-item-selected {
-    color: @primary-color;
-    background-color: @dark-half;
+    color: @menu-dark-color-select;
+    background-color: @menu-dark-background-color-select;
 
     & > a {
-      color: @primary-color;
+      color: @menu-dark-color-select;
     }
 
     &:hover {
-      background-color: @dark-half;
+      background-color: @menu-dark-color-hover;
     }
   }
 }
 
+//气泡菜单，用于下拉的
 .popovermenu {
   width: 280px;
   left: 12px !important;
@@ -324,6 +328,7 @@
   }
 }
 
+//全局加载框
 .spin {
   :global .ant-spin-container {
     height: 100vh;

@@ -10,7 +10,7 @@ import config from '../../utils/config';
 //CSS
 import styles from './main.less';
 
-function Index ({ isNavbar, siderFold, darkTheme, siderProps, headerProps, children, location }) {
+function Index ({ isNavbar, siderFold, siderProps, headerProps, children, location }) {
 
   const layoutClass = classnames(
     styles.layout,
@@ -20,7 +20,7 @@ function Index ({ isNavbar, siderFold, darkTheme, siderProps, headerProps, child
 
   const asideClass = classnames(
     styles.sider,
-    { [styles.light]: !darkTheme }
+    { [styles.light]: false }
   );
 
   const contentClass = classnames(

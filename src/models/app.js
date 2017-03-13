@@ -8,7 +8,6 @@ export default {
     login: !config.needLogin,
     menuPopoverVisible: false,
     siderFold: localStorage.getItem('antdAdminSiderFold')==='true',
-    darkTheme: localStorage.getItem('antdAdminDarkTheme')!=='false',
     isNavbar: document.body.clientWidth < 769,
     user: {
       accountId: 'guest',
@@ -82,14 +81,6 @@ export default {
       return {
         ...state,
         siderFold: !state.siderFold
-      }
-    },
-
-    changeTheme (state) {
-      localStorage.setItem('antdAdminDarkTheme', !state.darkTheme)
-      return {
-        ...state,
-        darkTheme: !state.darkTheme
       }
     },
 

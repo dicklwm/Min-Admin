@@ -3,8 +3,8 @@
   "scripts": {
     "start": "roadhog server --no-open",
     "build": "roadhog build",
-    "lint": "eslint --ext .js src test"
-    
+    "lint": "eslint --ext .js src test",
+    "precommit": "npm run lint"
   },
   "engines": {
     "install-node": "6.9.2"

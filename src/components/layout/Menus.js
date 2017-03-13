@@ -42,13 +42,13 @@ const getMenus = function (menuArray, siderFold, parentPath = '/') {
   })
 }
 
-function Menus ({ siderFold, darkTheme, location, handleClickNavMenu, className }) {
+function Menus ({ siderFold, location, handleClickNavMenu, className }) {
   const menuItems = getMenus(menu, siderFold);
   return (
     <Menu
       className={className}
       mode={siderFold ? 'vertical' : 'inline'}
-      theme={darkTheme ? 'dark' : 'light'}
+      theme= 'dark'
       onClick={handleClickNavMenu}
       defaultOpenKeys={ [location.pathname.split('/')[1]] }
       defaultSelectedKeys={[location.pathname.split('/')[location.pathname.split('/').length - 1] || config.defaultSelectMenu]}
