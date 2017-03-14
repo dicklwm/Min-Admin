@@ -34,27 +34,17 @@ module.exports = [
   },
 
   {
-    key: 'navigation',
-    name: '测试导航',
-    icon: 'setting',
+    key: 'userManage',
+    name: '用户管理',
+    icon: 'user',
     child: [
       {
-        key: 'navigation1',
-        name: '二级导航1'
+        key: "SectorList",
+        name: '部门列表'
       },
       {
-        key: 'navigation2',
-        name: '二级导航2',
-        child: [
-          {
-            key: 'navigation21',
-            name: '三级导航1'
-          },
-          {
-            key: 'navigation22',
-            name: '三级导航2'
-          }
-        ]
+        key: "UserList",
+        name: '用户列表',
       }
     ]
   }

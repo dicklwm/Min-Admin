@@ -39,8 +39,6 @@ function Bread ({ location }) {
       item = ('-' + config.defaultSelectMenu).hyphenToHump();
     }
 
-    console.log(item, pathSet, pathSet[item]);
-
     return (
       <Breadcrumb.Item
         key={key}

@@ -52,6 +52,8 @@ function RouterConfig ({ history, app }) {
 
         makeRoute('workflow/definition'),
 
+        makeRoute('userManage/userList'),
+
       ],
     },
   ];

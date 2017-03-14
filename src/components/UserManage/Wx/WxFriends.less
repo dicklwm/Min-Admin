@@ -1,0 +1,226 @@
+//@panel-width: 768px;
+@panel-width: 100%;
+//@panel-height: 824px;
+@panel-height: 100%;
+//@sider-height: 796px;
+@sider-height: 97%;
+
+:global .ant-notification {
+  width: auto;
+  max-width: 800px;
+}
+
+:global .text-left {
+  text-align: left;
+}
+
+:global .text-overflow {
+  overflow: hidden; //超出的文本隐藏
+
+  text-overflow: ellipsis; //溢出用省略号显示
+
+  white-space: nowrap; //溢出不换行
+}
+
+.wx-friends-panel {
+  width: @panel-width;
+  height: @panel-height;
+
+  //左边的sider
+  .friends-sider {
+    width: 230px;
+    background-color: #ececec;
+
+    .content {
+      height: @sider-height;
+      overflow-x: hidden;
+      overflow-y: hidden;
+
+      &:hover {
+        overflow-x: auto;
+        overflow-y: auto;
+      }
+    }
+
+    .item {
+      cursor: pointer;
+      font-size: 14px;
+      padding: 5px 10px;
+      color: #000;
+      white-space: nowrap;
+
+      &.active {
+        background-color: #CACDD3 !important;
+      }
+
+      &:hover {
+        background-color: #fAfDf3;
+      }
+
+      .wx-friends-img {
+        width: 40px;
+        height: 40px;
+        vertical-align: middle;
+        margin-right: 10px;
+        border-radius: 5px;
+        float: left;
+      }
+
+      .info {
+
+        .name {
+        }
+
+      }
+
+    }
+
+  }
+
+  //右边的layout
+  .friends-layout {
+    border-top: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    //头
+    .friends-header {
+      font-size: 18px;
+      background-color: #fff;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+    //中间的layout
+    .friends-content-layout {
+      background-color: #fff;
+      //左边的内容
+      .content {
+        border-right: 1px solid #ddd;
+        overflow: auto;
+        //日期
+        .date {
+          text-align: center;
+          font-size: 14px;
+          color: #aaa;
+          margin-bottom: 5px;
+        }
+
+        //单条数据
+        .item {
+          display: flex;
+          align-items: flex-start;
+          margin-bottom: 5px;
+          flex-shrink: 0;
+          //头像
+          & > img {
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+            margin: 0 5px;
+          }
+          //小箭头
+          .arrow {
+            border-width: 5px 10px;
+            border-style: dashed solid solid dashed;
+            width: 0;
+            height: 0;
+            top: 15px;
+            position: relative;
+          }
+          .content {
+            position: relative;
+            border-radius: 5px;
+            padding: 11px 7px;
+            box-sizing: border-box;
+            min-width: 70px;
+            max-width: 80%;
+            min-height: 40px;
+            font-size: 14px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            cursor: default;
+
+            &.voice {
+              display: flex;
+              justify-content: space-between;
+              cursor: pointer;
+            }
+
+            &.allow {
+              cursor: pointer;
+            }
+
+          }
+
+          //左边的内容
+          &.left {
+            .arrow {
+              order: 1;
+              border-color: #beceeb #beceeb transparent transparent;
+              transform: rotate(10deg);
+            }
+
+            .content {
+              order: 2;
+              left: -10px;
+              background-color: #beceeb;
+            }
+
+            & > img {
+              order: 0;
+            }
+          }
+          //右边的内容
+          &.right {
+            justify-content: flex-end;
+            & > img {
+              order: 3;
+            }
+            .arrow {
+              order: 2;
+              border-color: #9eea6a transparent transparent #9eea6a;
+              transform: rotate(-10deg);
+            }
+            .content {
+              order: 1;
+              right: -10px;
+              background-color: #9eea6a;
+              & > img {
+                vertical-align: middle;
+              }
+            }
+          }
+        }
+      }
+      //右边的详细信息
+      .sider {
+        background-color: #fff;
+        .title {
+          text-align: center;
+          font-size: 18px;
+        }
+        //头像
+        .head {
+          width: 100px;
+          height: 100px;
+          text-align: center;
+        }
+
+      }
+    }
+    //底下的页脚
+    .friends-footer {
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid #ddd;
+      background-color: #fff;
+
+      .pagination {
+        display: inline-block;
+        vertical-align: top;
+      }
+    }
+  }
+
+}
+
+

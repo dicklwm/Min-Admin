@@ -17,7 +17,7 @@
       .logo {
         img {
           width: 28px;
-          height:28px;
+          height: 28px;
           margin: 6px 7px;
         }
       }
@@ -60,15 +60,14 @@
     }
   }
 
-
-
   //头部菜单
   .header {
     :global .ant-menu-horizontal {
+      border: none;
+      background-color: @menu-horizontal-background-color;
       & > .ant-menu-submenu {
         float: right;
       }
-      border: none;
     }
     box-shadow: @shadow-2;
     position: relative;
@@ -99,7 +98,7 @@
 
   //主窗体内容
   .main {
-    margin-left: 224px;
+    margin-left: @sider-width;
     overflow: auto;
     height: 100vh;
     transition: @transition-ease-out;
@@ -252,56 +251,65 @@
 
 //重写  菜单的黑色风格
 :global .ant-menu-dark {
-  color: @menu-dark-color;
-  background: @sider-background-color;
+  color: @menu-dark-color !important;
+  background: @sider-background-color !important;
 
-  //悬停在title或者li上时
-  .ant-menu-submenu:hover {
-    color: @primary-color;
-  }
-  //子菜单   ul
-  .ant-menu-sub {
-    color: @menu-dark-color;
-  }
-  //被选中的子菜单  subitem
-  .ant-menu-submenu-selected {
-    color: @menu-dark-color-select;
-
-    &:not(.ant-menu-submenu-open) {
-      background-color: @menu-dark-background-color-select;
-    }
-  }
-  //所有的菜单
   .ant-menu-item,
-  .ant-menu-submenu-title {
-    background-color: @sider-background-color;
-    //菜单底下的 a标签
-    & > a {
-      color: @menu-dark-color;
-    }
-    //悬停菜单时的a
-    &:hover > a {
-      color: @menu-dark-color-hover;
+  .ant-menu-submenu {
+    border-bottom: @menu-border-bottom;
+  }
+  .ant-menu-submenu.ant-menu-submenu-open {
+    .ant-menu-submenu-title {
+      border-bottom: @menu-border-bottom;
+      transition: none;
     }
   }
 
-  //
-  &.ant-menu-inline {
-    .ant-menu-item-selected {
-      background-color: @menu-dark-background-color-select;
-    }
-  }
+}
 
+:global .ant-menu-root.ant-menu-dark.ant-menu-inline {
   .ant-menu-item-selected {
-    color: @menu-dark-color-select;
     background-color: @menu-dark-background-color-select;
+  }
+}
 
-    & > a {
-      color: @menu-dark-color-select;
+:global .ant-menu-dark.ant-menu-inline {
+  //主菜单的字体大小
+  .ant-menu-submenu-title,
+  .ant-menu-item {
+    font-size: @menu-submenu-fontsize;
+  }
+
+  //子菜单的各item
+  .ant-menu-sub {
+    .ant-menu-item {
+      border-bottom: @menu-border-bottom;
+      background: url("../../assets/Images/menu_line.png") @sider-background-color no-repeat 26px 0;
+      &:last-child{
+        border-bottom: none;
+      }
+      //子菜单的文字大小
+      a {
+        font-size: @menu-item-fontsize;
+      }
+
     }
+    //子菜单被选中
+    .ant-menu-item-selected {
+      background: url("../../assets/Images/menu_line_active.png") @sider-background-color no-repeat 22px 0;
+      a {
+        color: @menu-dark-color-select;
+      }
+    }
+  }
+}
 
+//选中子菜单，主菜单的样式
+:global .ant-menu-submenu-selected {
+  .ant-menu-submenu-title {
+    background-color: @menu-dark-background-color-select;
     &:hover {
-      background-color: @menu-dark-color-hover;
+      background-color: @menu-dark-background-color-select !important;
     }
   }
 }
