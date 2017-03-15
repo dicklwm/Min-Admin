@@ -137,7 +137,6 @@
             font-size: 14px;
             white-space: pre-wrap;
             word-wrap: break-word;
-            cursor: default;
 
             &.voice {
               display: flex;
@@ -146,6 +145,17 @@
             }
 
             &.allow {
+              cursor: pointer;
+            }
+
+            &.voice {
+              display: flex;
+              justify-content: space-between;
+              cursor: pointer;
+            }
+
+            .image {
+              width: 90px;
               cursor: pointer;
             }
 
@@ -184,6 +194,7 @@
               order: 1;
               right: -10px;
               background-color: #9eea6a;
+
               & > img {
                 vertical-align: middle;
               }

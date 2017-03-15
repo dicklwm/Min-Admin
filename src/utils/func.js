@@ -208,8 +208,28 @@ function objToItemFields (arr, getFieldDecorator,
 
 }
 
+/**
+ * 将json转为url格式
+ * @param param 要转换的数据
+ * @param key 可选，前缀
+ * @returns {string}
+ */
+function parseParam (param, key) {
+  var paramStr = "";
+  if (typeof param==="string" || typeof param==="number" || typeof param==='boolean') {
+    paramStr += "&" + key + "=" + encodeURIComponent(param);
+  } else {
+    for (var v in param) {
+      var k = key==null ? v : key + (param instanceof Array ? "[" + v + "]" : "." + v);
+      paramStr += '&' + parseParam(param[v], k);
+    }
+  }
+  return paramStr.substr(1);
+};
+
 module.exports = {
   makeChildren,
   makePropsToFields,
   objToItemFields,
+  parseParam,
 }
