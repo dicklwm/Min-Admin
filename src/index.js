@@ -20,4 +20,4 @@ app.router(require('./router'));
 // 5. Start
 app.start('#root');
 
-document.cookie = 'PHPSESSID=nqgod42tdocn20a71i2aaunp14'
+document.cookie = 'PHPSESSID=n5mupnpmnr3m5rhs3765t9ifd0'

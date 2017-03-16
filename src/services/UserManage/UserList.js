@@ -3,7 +3,6 @@ import request from '../../utils/request';
 import {parseParam} from '../../utils/func';
 
 export async function getMessage (params) {
-  document.cookie = 'PHPSESSID=nqgod42tdocn20a71i2aaunp14'
   return request('/api/weixin_friends/message', {
     method: 'POST',
     credentials: 'same-origin',

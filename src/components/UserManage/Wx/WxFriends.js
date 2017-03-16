@@ -19,8 +19,9 @@ class WxFriends extends React.Component {
       lightboxIsOpen: false,
       currentImage: 0,
       //???????????
-      images: this.props.messages.filter(item => item.type==='image').map(item => {
+      images: this.props.messages.filter(item => item.type==='image').map((item, index) => {
         item.src = item.message;
+        item.index = index;
         return item;
       })
     }
@@ -39,10 +40,15 @@ class WxFriends extends React.Component {
   }
 
   handleImageClick (item) {
-    console.log(item);
     this.setState({
       lightboxIsOpen: true,
-      currentImage: this.state.images.findIndex(image => item.id===image.id)
+      currentImage: item.index
+    })
+  }
+
+  handleChangeImageIndex (type) {
+    this.setState({
+      currentImage: type==='prev' ? --this.state.currentImage : ++this.state.currentImage
 
     })
   }
@@ -154,39 +160,43 @@ class WxFriends extends React.Component {
       <div>
         <Card bordered={false} bodyStyle={{ textAlign: 'center' }}>
           <img src={self.icon} alt="头像" className={styles.head}/>
-          <div className="text-left text-overflow" title={self.truename}>{`用户姓名：${self.truename}`}</div>
-          <div className="text-left text-overflow" title={self.nickname}>{`昵称：${self.nickname}`}</div>
-          <div className="text-left text-overflow" title={self.wx_nickname}>{`微信昵称：${self.wx_nickname}`}</div>
-          <div className="text-left text-overflow" title={self.friends_count}>
-            {`好友总数：${self.friends_count}`}</div>
-          <div className="text-left text-overflow" title={self.receive_count}>
-            {`消息总数：${self.receive_count}`}</div>
-          <div className="text-left text-overflow" title={self.friends_today_count}>
-            {`今日好友：${self.friends_today_count}`}</div>
-          <div className="text-left text-overflow" title={self.message_today_count}>
-            {`今天聊天：${self.message_today_count}`}</div>
+          <div className="text-left text-overflow" title={self.truename || ''}>
+            {`用户姓名：${self.truename || ''}`}</div>
+          <div className="text-left text-overflow" title={self.nickname || ''}>
+            {`昵称：${self.nickname || ''}`}</div>
+          <div className="text-left text-overflow"
+               title={self.wx_nickname || ''}>
+            {`微信昵称：${self.wx_nickname || ''}`}</div>
+          <div className="text-left text-overflow" title={self.friends_count || ''}>
+            {`好友总数：${self.friends_count || ''}`}</div>
+          <div className="text-left text-overflow" title={self.receive_count || ''}>
+            {`消息总数：${self.receive_count || ''}`}</div>
+          <div className="text-left text-overflow" title={self.friends_today_count || ''}>
+            {`今日好友：${self.friends_today_count || ''}`}</div>
+          <div className="text-left text-overflow" title={self.message_today_count || ''}>
+            {`今天聊天：${self.message_today_count || ''}`}</div>
         </Card>
 
         <Card bordered={false} bodyStyle={{ textAlign: 'center' }}>
           <img src={friend.icon} alt="头像" className={styles.head}/>
-          <div className="text-left text-overflow" title={friend.alias}>
-            {`用户姓名：${friend.alias}`}</div>
-          <div className="text-left text-overflow" title={friend.nickname}>
-            {`昵称：${friend.nickname}`}</div>
-          <div className="text-left text-overflow" title={friend.receive_count}>
-            {`回复：${friend.receive_count}`}</div>
-          <div className="text-left text-overflow" title={friend.receive_word}>
-            {`文字：${friend.receive_word}`}</div>
-          <div className="text-left text-overflow" title={friend.day_count}>
-            {`聊天天数：${friend.day_count}`}</div>
-          <div className="text-left text-overflow" title={friend.send_count}>
-            {`聊天数量：${friend.send_count}`}</div>
-          <div className="text-left text-overflow" title={friend.remark_name}>
-            {`备注名：${friend.remark_name}`}</div>
-          <div className="text-left text-overflow" title={friend.remark}>
-            {`备注：${friend.remark}`}</div>
-          <div className="text-left text-overflow" title={friend.create_at}>
-            {`时间：${friend.create_at}`}</div>
+          <div className="text-left text-overflow" title={friend.alias || ''}>
+            {`用户姓名：${friend.alias || ''}`}</div>
+          <div className="text-left text-overflow" title={friend.nickname || ''}>
+            {`昵称：${friend.nickname || ''}`}</div>
+          <div className="text-left text-overflow" title={friend.receive_count || ''}>
+            {`回复：${friend.receive_count || ''}`}</div>
+          <div className="text-left text-overflow" title={friend.receive_word || ''}>
+            {`文字：${friend.receive_word || ''}`}</div>
+          <div className="text-left text-overflow" title={friend.day_count || ''}>
+            {`聊天天数：${friend.day_count || ''}`}</div>
+          <div className="text-left text-overflow" title={friend.send_count || ''}>
+            {`聊天数量：${friend.send_count || ''}`}</div>
+          <div className="text-left text-overflow" title={friend.remark_name || ''}>
+            {`备注名：${friend.remark_name || ''}`}</div>
+          <div className="text-left text-overflow" title={friend.remark || ''}>
+            {`备注：${friend.remark || ''}`}</div>
+          <div className="text-left text-overflow" title={friend.create_at || ''}>
+            {`时间：${friend.create_at || ''}`}</div>
         </Card>
       </div>
 
@@ -204,12 +214,22 @@ class WxFriends extends React.Component {
     })
   }
 
+  componentWillReceiveProps (nextProps) {
+    this.setState({
+      images: nextProps.messages.filter(item => item.type==='image').map((item, index) => {
+        item.src = item.message;
+        item.index = index;
+        return item;
+      })
+    })
+  }
+
   render () {
 
     const { messages, friendInfo, friends, activeFriends } = this.props;
 
     return (
-      <div>
+      <div style={{ width: '100%', height: '100%' }}>
         <Layout className={styles['wx-friends-panel']}>
           <Sider width={230} className={styles['friends-sider']}>
             <Search onSearch={value => console.log(value)} placeholder="请输入搜索信息"/>
@@ -260,7 +280,11 @@ class WxFriends extends React.Component {
           backdropClosesModal={true}
           isOpen={this.state.lightboxIsOpen}
           images={this.state.images}
+          currentImage={this.state.currentImage}
           onClose={this.handleImageBoxClose}
+          onClickPrev={() => this.handleChangeImageIndex('prev')}
+          onClickNext={() => this.handleChangeImageIndex('next')}
+          onClickImage={this.handleImageBoxClose}
         />
 
       </div>
