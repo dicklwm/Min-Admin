@@ -3,7 +3,8 @@ import { Menu, Icon, Popover } from 'antd'
 import styles from './main.less'
 import Menus from './Menus';
 
-import fontawesome from 'fontawesome';
+import FontAwesome  from 'react-fontawesome';
+import 'font-awesome/css/font-awesome.min.css';
 
 const SubMenu = Menu.SubMenu
 
@@ -35,26 +36,40 @@ function Header ({ user, siderFold, isNavbar, menuPopoverVisible, location, swit
       }
 
       <Menu className='header-menu' mode='horizontal' onClick={handleClickMenu}>
-        <SubMenu style={{ float: 'right' }}
-                 title={
-                   <span>
-                     <Icon type='user'/>
-                     {user.accountName}
-                   </span>
-                 }
+        <SubMenu title={<span>
+                         <Icon type='user'/>
+                          {user.accountName}
+                        </span>        }
         >
+          <Menu.Item key='info'>
+            <a>个人消息</a>
+          </Menu.Item>
+          <Menu.Item key='changePassword'>
+            <a>修改密码</a>
+          </Menu.Item>
           <Menu.Item key='logout'>
             <a>注销</a>
           </Menu.Item>
         </SubMenu>
 
-        <SubMenu style={{ float: 'right' }}
-                 title={
-                   <span>{fontawesome}</span>
-                 }
-        >
+        <SubMenu title={
+          <FontAwesome name="refresh" spin/>
+        }
+        />
+        <SubMenu title={
+          <FontAwesome name="bell"/>
+        }
+        />
 
-        </SubMenu>
+        <SubMenu title={
+          <FontAwesome name="wechat"/>
+        }
+        />
+
+        <SubMenu title={
+          <FontAwesome name="file-text-o"/>
+        }
+        />
 
       </Menu>
 
