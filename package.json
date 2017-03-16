@@ -14,10 +14,13 @@
     "classnames": "^2.2.5",
     "dva": "^1.2.1",
     "dva-loading": "^0.2.0",
+    "font-awesome": "^4.7.0",
     "material-ui": "^0.17.1",
     "moment": "^2.17.1",
     "react": "^15.4.0",
     "react-dom": "^15.4.0",
+    "react-fontawesome": "^1.5.0",
+    "react-images": "^0.5.2",
     "react-tap-event-plugin": "^2.0.1",
     "watchjs": "^0.0.0"
   },
