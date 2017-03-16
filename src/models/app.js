@@ -13,6 +13,7 @@ export default {
       accountId: 'guest',
       accountName: 'guest',
     },
+    menuOpenKeys: null,
   },
   effects: {
     *login ({ payload }, { call, put }) {
@@ -35,7 +36,6 @@ export default {
 
     *logout ({ payload }, { call, put }) {
       const res = yield call(appServices.logout, payload);
-      console.log(res);
       if (res.data.success) {
         yield put({
           type: 'logoutSuccess'
@@ -101,12 +101,23 @@ export default {
         ...state,
         menuPopoverVisible: !state.menuPopoverVisible
       }
+    },
+    changeMenu(state, action){
+      return {
+        ...state,
+        menuOpenKeys: [action.payload[1]],
+      }
     }
   },
   subscriptions: {
-    setup({ dispatch }){
+    setup({ dispatch, history }){
       window.onresize = () => dispatch({ type: 'changeNavbar' })
-
+      history.listen(({ pathname }) => {
+        dispatch({
+          type: 'changeMenu',
+          payload: pathname.split('/'),
+        })
+      })
     }
   },
 };

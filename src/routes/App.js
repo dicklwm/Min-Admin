@@ -4,9 +4,8 @@ import Index from '../components/layout/Index';
 import Login from '../components/Login/Login';
 import '../components/layout/common.less';
 
-
 function App ({ children, location, dispatch, loading, app }) {
-  const { login, user, siderFold, darkTheme, isNavbar, menuPopoverVisible } = app
+  const { login, user, siderFold, isNavbar, menuPopoverVisible, menuOpenKeys } = app
 
   const headerProps = {
     user,
@@ -33,10 +32,16 @@ function App ({ children, location, dispatch, loading, app }) {
 
   const siderProps = {
     siderFold,
-    darkTheme,
     location,
+    menuOpenKeys,
     changeTheme () {
       dispatch({ type: 'app/changeTheme' })
+    },
+    handleClickNavMenu(value){
+      dispatch({
+        type: 'app/changeMenu',
+        payload: value,
+      })
     }
   }
 

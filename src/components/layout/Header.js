@@ -5,9 +5,6 @@ import Menus from './Menus';
 
 import fontawesome from 'fontawesome';
 
-console.log(fontawesome);
-window.f = fontawesome;
-
 const SubMenu = Menu.SubMenu
 
 function Header ({ user, siderFold, isNavbar, menuPopoverVisible, location, switchMenuPopover, logout, switchSider }) {
