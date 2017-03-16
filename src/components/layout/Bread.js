@@ -31,8 +31,6 @@ function Bread ({ location }) {
     }
   })
 
-  console.log(location,pathNames);
-
   const breads = pathNames.map((item, key) => {
     //判断是否默认打开的主页
     if (!(item in pathSet)) {

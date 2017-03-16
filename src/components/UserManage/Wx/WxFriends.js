@@ -2,14 +2,14 @@ import React from 'react';
 import { connect } from 'dva';
 import { Input, Layout, Badge, Card, Tooltip, Button, DatePicker, Pagination, Icon } from 'antd';
 import styles from './WxFriends.less';
-import icon_default from '../../../assets/Images/icon_default.png';
+import classnames from 'classnames';
+import moment from 'moment';
 import Lightbox from 'react-images'
 
-import classnames from 'classnames';
+
+// import icon_default from '../../../assets/Images/icon_default.png';
 
 const { Header, Footer, Sider, Content } = Layout;
-
-const Search = Input.Search;
 
 class WxFriends extends React.Component {
 
@@ -23,7 +23,7 @@ class WxFriends extends React.Component {
         item.src = item.message;
         item.index = index;
         return item;
-      })
+      }),
     }
   }
 
@@ -59,10 +59,51 @@ class WxFriends extends React.Component {
     })
   }
 
+  handleAudioClick = (id) => {
+    const thisAudio = this.refs['audio' + id]
+    window.v = thisAudio;
+    //先暂停其他的
+    Object.values(this.refs).forEach(ref => {
+      if (ref instanceof HTMLAudioElement) {
+        if (!ref.paused) {
+          ref.pause();
+        }
+      }
+    })
+    if (thisAudio.paused) {
+      thisAudio.play();
+    } else {
+      thisAudio.pause();
+    }
+
+  }
+
+  handleSearchFriends (value) {
+    console.log(value);
+    this.props.dispatch({
+      type: 'UserManage/UserList/searchFriends',
+      payload: value,
+    })
+  }
+
+  handleSearchMessages (value) {
+    this.props.dispatch({
+      type: 'UserManage/UserList/searchMessages',
+      payload: value,
+    })
+  }
+
+  handleSearchMessagesDate (value) {
+    this.props.dispatch({
+      type: 'UserManage/UserList/searchMessagesDate',
+      payload: value
+    })
+  }
+
   makeMessage (messages, friendsInfo) {
     let create_at = 0,
-      next_create_at = 0;
-    let that = this;
+      next_create_at = 0,
+      that = this;
 
     function selfOrFrirend (item) {
       if (!item.self) {
@@ -88,10 +129,14 @@ class WxFriends extends React.Component {
       switch (item.type) {
         case 'voice':
           return (
-            <div className={classnames(styles.content, styles.voice)}>
-              <div>
+            <div className={classnames(styles.content, styles.voice)}
+                 onClick={() => that.handleAudioClick(item.id)}>
+              <div >
                 <Icon type="sound"/>
-                <audio src={item.message.split(',')[0]}></audio>
+                <audio src={item.message.split(',')[0]} ref={'audio' + item.id}
+                       onPlay={(e) => e.target.parentElement.getElementsByTagName('i')[0].className = "anticon anticon-play-circle"}
+                       onPause={(e) => e.target.parentElement.getElementsByTagName('i')[0].className = "anticon anticon-sound"}
+                ></audio>
               </div>
               <div>{(item.message.split(',')[1] / 1000).toFixed(2)}</div>
             </div>
@@ -107,7 +152,7 @@ class WxFriends extends React.Component {
       }
     }
 
-    return messages.map((item, index) => {
+    const allMessages = messages.map((item, index) => {
       next_create_at = new Date(item.create_at);
 
       //5分钟以上显示日期时间
@@ -131,6 +176,8 @@ class WxFriends extends React.Component {
       }
 
     })
+
+    return allMessages;
 
   }
 
@@ -220,19 +267,27 @@ class WxFriends extends React.Component {
         item.src = item.message;
         item.index = index;
         return item;
-      })
+      }),
     })
   }
 
   render () {
+    window.moment = moment;
 
-    const { messages, friendInfo, friends, activeFriends } = this.props;
+    const { friendInfo, activeFriends, friends, messages, searchMessageDate, searchMessage, searchFriends } = this.props;
 
     return (
       <div style={{ width: '100%', height: '100%' }}>
         <Layout className={styles['wx-friends-panel']}>
           <Sider width={230} className={styles['friends-sider']}>
-            <Search onSearch={value => console.log(value)} placeholder="请输入搜索信息"/>
+            <Input placeholder="请输入搜索信息"
+                   value={searchFriends}
+                   suffix={ searchFriends ?
+                     <Icon type="close-circle"
+                           style={{ cursor: 'pointer' }}
+                           onClick={() => this.handleSearchFriends('')}/> : null}
+                   onChange={e => this.handleSearchFriends(e.target.value)}
+            />
             <div className={styles.content}>
               {this.makeFriends(friends, activeFriends)}
             </div>
@@ -245,7 +300,9 @@ class WxFriends extends React.Component {
             <Layout className={styles['friends-content-layout']}>
 
               <Content className={styles.content}>
-                {this.makeMessage(messages, friendInfo)}
+                <div style={{ width: '100%', height: '100%', overflow: 'auto' }} ref="message-content">
+                  {this.makeMessage(messages, friendInfo)}
+                </div>
               </Content>
 
               <Sider className={styles.sider}>
@@ -260,7 +317,14 @@ class WxFriends extends React.Component {
             <Footer className={styles['friends-footer']}>
 
               <Tooltip title={
-                <Search placeholder="请输入你需要搜索的内容" style={{ width: 180 }}/>
+                <Input placeholder="请输入你需要搜索的内容" style={{ width: 180 }}
+                       value={searchMessage}
+                       suffix={ searchMessage ?
+                         <Icon type="close-circle"
+                               style={{ color: '#666' }}
+                               onClick={() => this.handleSearchMessages('')}/> : null}
+                       onChange={e => this.handleSearchMessages(e.target.value)}
+                />
               }
                        getPopupContainer={triggerNode => triggerNode}
               >
@@ -268,10 +332,17 @@ class WxFriends extends React.Component {
               </Tooltip>
 
               <DatePicker
-                getCalendarContainer={trigger => trigger}
+                value={searchMessageDate && moment(searchMessageDate)}
+                getCalendarContainer={trigger => trigger.parentElement}
+                onChange={(date) => this.handleSearchMessagesDate(date)}
               />
 
-              <Pagination simple defaultCurrent={2} total={50} className={styles.pagination}/>
+              <div className={styles.pagination}>
+                <Button>首页</Button>
+                <Button>上一页</Button>
+                <Button>下一页</Button>
+                <Button>尾页</Button>
+              </div>
 
             </Footer>
           </Layout>
@@ -300,6 +371,9 @@ function mapStateToProps (state) {
     friendInfo: UserList.friendInfo,
     activeFriends: UserList.activeFriends,
     account: UserList.account,
+    searchFriends: UserList.searchFriends,
+    searchMessage: UserList.searchMessage,
+    searchMessageDate: UserList.searchMessageDate,
   };
 }
 

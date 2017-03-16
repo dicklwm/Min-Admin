@@ -191,62 +191,6 @@
     }
   }
 
-  /*.siderMenu {
-  //  position: absolute;
-  //  width: 100%;
-  //  max-height: ~"calc(100% - 88px)";
-  //  overflow-y: scroll;
-  //  overflow-x: hidden;
-  //
-  //  &::-webkit-scrollbar-thumb {
-  //    display: none;
-  //  }
-  //}
-
-  //.switchtheme {
-  //  width: 100%;
-  //  position: absolute;
-  //  bottom: 0;
-  //  height: 48px;
-  //  background-color: @dark-half;
-  //  display: flex;
-  //  justify-content: space-between;
-  //  align-items: center;
-  //  padding: 0 16px 0 24px;
-  //  overflow: hidden;
-  //  z-index: 1000;
-  //
-  //  span {
-  //    white-space: nowrap;
-  //    overflow: hidden;
-  //  }
-  //
-  //  :global {
-  //    .anticon {
-  //      min-width: 14px;
-  //      margin-right: 8px;
-  //      font-size: 14px;
-  //    }
-  //  }
-  //}
-
-  //:global {
-  //  .ant-menu-dark,
-  //  .ant-menu-dark .ant-menu-sub {
-  //    //color: #999;
-  //  }
-  //
-  //  .ant-menu {
-  //    transition: @transition-ease-out;
-  //
-  //    .ant-menu-item,
-  //    .ant-menu-submenu-title {
-  //      overflow: hidden;
-  //      white-space: normal;
-  //    }
-  //  }
-  //}
-  */
 }
 
 //重写  菜单的黑色风格
@@ -284,19 +228,20 @@
   .ant-menu-sub {
     .ant-menu-item {
       border-bottom: @menu-border-bottom;
-      background: url("../../assets/Images/menu_line.png") @sider-background-color no-repeat 26px 0;
+      background: url("../../assets/Images/menu_line.png") @sider-background-color no-repeat 46px 0;
       &:last-child{
         border-bottom: none;
       }
       //子菜单的文字大小
       a {
         font-size: @menu-item-fontsize;
+        text-indent: 25px;
       }
 
     }
     //子菜单被选中
     .ant-menu-item-selected {
-      background: url("../../assets/Images/menu_line_active.png") @sider-background-color no-repeat 22px 0;
+      background: url("../../assets/Images/menu_line_active.png") @sider-background-color no-repeat 42px 0;
       a {
         color: @menu-dark-color-select;
       }

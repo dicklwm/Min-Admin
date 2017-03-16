@@ -3,29 +3,39 @@ import * as UserListService from '../../services/UserManage/UserList';
 export default {
   namespace: 'UserManage/UserList',
   state: {
-    keyword: "",
     self: 0,
     activeFriends: 0,
     account: [],
+    allFriends: [],
     friends: [],
+    allMessages: [],
     messages: [],
     friendInfo: {
       friend: {},
       self: {}
     },
+    searchFriends: "",
+    searchMessage: "",
+    searchMessageDate: undefined,
   },
   reducers: {
     getMessageReducer(state, action){
       return {
         ...state,
+        allMessages: action.payload.data.message,
         messages: action.payload.data.message,
+        searchMessage: "",
       }
     },
     getWxInfoReducer(state, action){
       return {
         ...state,
         account: action.payload.data.account,
+        allFriends: Object.values(Object.values(action.payload.data.account)[0].friends),
         friends: Object.values(Object.values(action.payload.data.account)[0].friends),
+        searchFriends: "",
+        searchMessage: "",
+        searchMessageDate: undefined,
       }
     },
     getFriendInfoReducer(state, action){
@@ -39,8 +49,52 @@ export default {
       return {
         ...state,
         activeFriends: action.payload.friends_wx,
+        searchMessage: "",
+        searchMessageDate: undefined,
       }
     },
+
+    searchFriends(state, action){
+      console.log(action.payload);
+      return {
+        ...state,
+        searchFriends: action.payload,
+        friends: state.allFriends.filter(item => item.nickname.toLocaleLowerCase().match(action.payload)),
+      }
+    },
+
+    searchMessages(state, action){
+      return {
+        ...state,
+        searchMessage: action.payload,
+        messages: state.allMessages.filter(item => item.message.match(action.payload)),
+        searchMessageDate: null,
+      }
+    },
+
+    searchMessagesDate(state, action){
+
+      let messages = [];
+      const searchDate = action.payload && new Date(action.payload.format('YYYY-MM-DD 00:00:00'));
+      if (action.payload===null) {
+        messages = state.allMessages;
+      } else {
+        messages = state.allMessages.filter(item => {
+          const date = new Date(item.create_at) - searchDate;
+
+          // return date <= 86400000 && date >= 0
+
+          return date >= 0
+
+        });
+      }
+      return {
+        ...state,
+        searchMessageDate: action.payload,
+        messages: messages,
+      }
+    }
+
   },
   effects: {
 

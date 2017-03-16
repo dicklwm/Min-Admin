@@ -3,6 +3,11 @@ import { Menu, Icon, Popover } from 'antd'
 import styles from './main.less'
 import Menus from './Menus';
 
+import fontawesome from 'fontawesome';
+
+console.log(fontawesome);
+window.f = fontawesome;
+
 const SubMenu = Menu.SubMenu
 
 function Header ({ user, siderFold, isNavbar, menuPopoverVisible, location, switchMenuPopover, logout, switchSider }) {
@@ -45,7 +50,17 @@ function Header ({ user, siderFold, isNavbar, menuPopoverVisible, location, swit
             <a>注销</a>
           </Menu.Item>
         </SubMenu>
+
+        <SubMenu style={{ float: 'right' }}
+                 title={
+                   <span>{fontawesome}</span>
+                 }
+        >
+
+        </SubMenu>
+
       </Menu>
+
     </div>
   )
 }
