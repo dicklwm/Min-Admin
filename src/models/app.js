@@ -95,7 +95,6 @@ export default {
     },
     //改变菜单
     changeMenu(state, action){
-      console.log(action.payload);
       return {
         ...state,
         menuOpenKeys: state.siderFold ? action.payload : [action.payload[1]],

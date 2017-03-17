@@ -1,8 +1,7 @@
 import React from 'react';
 import { Row, Col, Form, Input, Icon, Checkbox, Button }from 'antd';
-import styles from './Login.css';
+import styles from './Login.less';
 import config from '../../utils/config';
-import logo from '../../assets/Images/Min.jpg';
 
 const FormItem = Form.Item;
 
@@ -93,8 +92,7 @@ class Login extends React.Component {
                                alt="验证码"/>
                         </Col>
                         <Col span={4} style={{ lineHeight: '36px' }}>
-                              <span style={{ cursor: 'pointer' }}
-                                    onClick={this.changeVerify}>换一张</span>
+                          <a onClick={this.changeVerify}>换一张</a>
                         </Col>
                       </Row>
 
