@@ -1,4 +1,5 @@
 import * as UserListService from '../../services/UserManage/UserList';
+import { notification } from 'antd';
 
 export default {
   namespace: 'UserManage/UserList',
@@ -107,10 +108,14 @@ export default {
     },
     *getWxInfo({ payload }, { call, put }){
       const res = yield call(UserListService.getWxInfo, payload);
-      yield put({
-        type: 'getWxInfoReducer',
-        payload: res.data
-      })
+      if (res.data.errcode!==1) {
+        yield put({
+          type: 'getWxInfoReducer',
+          payload: res.data
+        })
+      } else {
+        notification.info({ description: res.data.msg, message: "提示" });
+      }
     },
 
     *getFriendInfo({ payload }, { call, put }){

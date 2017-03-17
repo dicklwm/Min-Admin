@@ -10,6 +10,7 @@ export default {
     siderFold: localStorage.getItem('antdAdminSiderFold')==='true',
     isNavbar: document.body.clientWidth < 769,
     user: JSON.parse(sessionStorage.getItem('user')),
+    weixin: JSON.parse(sessionStorage.getItem('weixin')),
     menuOpenKeys: [],
   },
   effects: {
@@ -21,6 +22,7 @@ export default {
           type: 'loginSuccess',
           payload: {
             user: data.data.user,
+            weixin: data.data.weixin,
           }
         })
       } else {
@@ -49,6 +51,7 @@ export default {
     loginSuccess (state, action) {
       window.sessionStorage.setItem('login', true);
       window.sessionStorage.setItem('user', JSON.stringify(action.payload.user));
+      window.sessionStorage.setItem('weixin', JSON.stringify(action.payload.weixin));
       return {
         ...state,
         ...action.payload,
@@ -58,6 +61,7 @@ export default {
     logoutSuccess (state) {
       window.sessionStorage.setItem('login', false);
       window.sessionStorage.removeItem('user');
+      window.sessionStorage.removeItem('weixin');
       return {
         ...state,
         login: false,
@@ -65,7 +69,7 @@ export default {
       }
     },
     //切换收缩模式
-    switchSider (state,action) {
+    switchSider (state, action) {
       localStorage.setItem('antdAdminSiderFold', !state.siderFold)
       return {
         ...state,

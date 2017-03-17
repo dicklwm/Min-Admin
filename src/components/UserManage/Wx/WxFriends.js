@@ -6,7 +6,6 @@ import classnames from 'classnames';
 import moment from 'moment';
 import Lightbox from 'react-images'
 
-
 // import icon_default from '../../../assets/Images/icon_default.png';
 
 const { Header, Footer, Sider, Content } = Layout;
@@ -252,11 +251,12 @@ class WxFriends extends React.Component {
 
   componentWillMount () {
     //硬编码！！！
-    const { dispatch } = this.props;
+    const { dispatch ,weixin } = this.props;
+    console.log(weixin);
     dispatch({
       type: 'UserManage/UserList/getWxInfo',
       payload: {
-        user_id: 974
+        user_id: weixin[0].id
       }
     })
   }
@@ -374,6 +374,7 @@ function mapStateToProps (state) {
     searchFriends: UserList.searchFriends,
     searchMessage: UserList.searchMessage,
     searchMessageDate: UserList.searchMessageDate,
+    weixin: state.app.weixin,
   };
 }
 
