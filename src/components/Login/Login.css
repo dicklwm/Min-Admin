@@ -1,21 +1,22 @@
 .login-page {
-  background: #d2d6de;
+  background: #d2d6de no-repeat top center;
   position: absolute;
   height: 100%;
   width: 100%;
+  background-size: 100% auto;
 }
 
 .login-box,
 .register-box {
   width: 360px;
-  margin: 7% auto;
+  margin: 30% auto;
 }
 
 @media (max-width: 768px) {
   .login-box,
   .register-box {
     width: 90%;
-    margin-top: 20px;
+    margin: 40% auto;
   }
 }
 
@@ -27,9 +28,17 @@
   font-weight: 300;
 }
 
+.login-logo img,
+.register-logo img {
+  height: 40px;
+  width: 48px;
+  margin-right: 15px;
+  vertical-align: sub;
+}
+
 .login-logo a,
 .register-logo a {
-  color: #444;
+  color: #fff;
 }
 
 .login-box-body,
@@ -45,6 +54,7 @@
   margin: 0;
   text-align: center;
   padding: 0 20px 20px 20px;
+  font-size: 18px;
 }
 
 .social-auth-links {
@@ -53,8 +63,9 @@
 
 .login-form-button {
   width: 100%;
-  margin-top:10px;
+  margin-top: 10px;
 }
+
 .login-form-forgot {
   float: right;
 }

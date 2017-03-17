@@ -19,14 +19,10 @@ function App ({ children, location, dispatch, loading, app }) {
     logout () {
       dispatch({
         type: 'app/logout',
-        payload: {
-          accountId: app.user.accountId,
-          accountId: app.user.accountName
-        }
       })
     },
     switchSider () {
-      dispatch({ type: 'app/switchSider' })
+      dispatch({ type: 'app/switchSider', payload: location.pathname })
     }
   }
 
@@ -34,9 +30,6 @@ function App ({ children, location, dispatch, loading, app }) {
     siderFold,
     location,
     menuOpenKeys,
-    changeTheme () {
-      dispatch({ type: 'app/changeTheme' })
-    },
     handleClickNavMenu(value){
       dispatch({
         type: 'app/changeMenu',

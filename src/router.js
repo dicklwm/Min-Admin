@@ -43,16 +43,21 @@ function RouterConfig ({ history, app }) {
         }
       },
       childRoutes: [
+        //增加login路由防止报错
+        {
+          path: 'login',
+          name: 'login'
+        },
 
         makeRoute('home'),
 
-        makeRoute('inventory/matter',true),
+        makeRoute('inventory/matter', true),
 
-        makeRoute('inventory/entry',true),
+        makeRoute('inventory/entry', true),
 
         makeRoute('workflow/definition'),
 
-        makeRoute('userManage/userList',true),
+        makeRoute('userManage/userList', true),
 
       ],
     },

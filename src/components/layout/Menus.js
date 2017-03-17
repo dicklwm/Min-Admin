@@ -51,7 +51,7 @@ function Menus ({ siderFold, location, handleClickNavMenu, className, menuOpenKe
       theme='dark'
       openKeys={menuOpenKeys}
       onOpenChange={handleClickNavMenu}
-      defaultOpenKeys={ [location.pathname.split('/')[1]] }
+      defaultOpenKeys={ siderFold ? null : [location.pathname.split('/')[1]] }
       defaultSelectedKeys={[location.pathname.split('/')[location.pathname.split('/').length - 1] || config.defaultSelectMenu]}
     >
       {menuItems}

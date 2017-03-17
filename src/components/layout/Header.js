@@ -38,7 +38,7 @@ function Header ({ user, siderFold, isNavbar, menuPopoverVisible, location, swit
       <Menu className='header-menu' mode='horizontal' onClick={handleClickMenu}>
         <SubMenu title={<span>
                          <Icon type='user'/>
-          {user.accountName}
+          {user.nickname}
                         </span>}
         >
           <Menu.Item key='info'>

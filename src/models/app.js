@@ -1,32 +1,26 @@
 import * as appServices from '../services/app';
-import config from '../utils/config';
+// import config from '../utils/config';
 import { notification } from 'antd';
 
 export default {
   namespace: 'app',
   state: {
-    login: !config.needLogin,
+    login: sessionStorage.getItem('login')==='true',
     menuPopoverVisible: false,
     siderFold: localStorage.getItem('antdAdminSiderFold')==='true',
     isNavbar: document.body.clientWidth < 769,
-    user: {
-      accountId: 'guest',
-      accountName: 'guest',
-    },
-    menuOpenKeys: null,
+    user: JSON.parse(sessionStorage.getItem('user')),
+    menuOpenKeys: [],
   },
   effects: {
     *login ({ payload }, { call, put }) {
       const res = yield call(appServices.login, payload);
       const data = res.data;
-      if (data.success) {
+      if (data.errcode===0) {
         yield put({
           type: 'loginSuccess',
           payload: {
-            user: {
-              accountId: data.data.accountId,
-              accountName: data.data.accountName,
-            }
+            user: data.data.user,
           }
         })
       } else {
@@ -34,9 +28,9 @@ export default {
       }
     },
 
-    *logout ({ payload }, { call, put }) {
-      const res = yield call(appServices.logout, payload);
-      if (res.data.success) {
+    *logout ({}, { call, put }) {
+      const res = yield call(appServices.logout);
+      if (res.data.errcode===0) {
         yield put({
           type: 'logoutSuccess'
         })
@@ -53,37 +47,33 @@ export default {
   },
   reducers: {
     loginSuccess (state, action) {
+      window.sessionStorage.setItem('login', true);
+      window.sessionStorage.setItem('user', JSON.stringify(action.payload.user));
       return {
         ...state,
         ...action.payload,
         login: true,
       }
     },
-    loginFail (state) {
-      return {
-        ...state,
-        login: false,
-      }
-    },
     logoutSuccess (state) {
+      window.sessionStorage.setItem('login', false);
+      window.sessionStorage.removeItem('user');
       return {
         ...state,
         login: false,
-        user: {
-          accountId: 'guest',
-          accountName: 'guest',
-        }
+        user: {}
       }
     },
-
-    switchSider (state) {
+    //切换收缩模式
+    switchSider (state,action) {
       localStorage.setItem('antdAdminSiderFold', !state.siderFold)
       return {
         ...state,
-        siderFold: !state.siderFold
+        siderFold: !state.siderFold,
+        menuOpenKeys: state.siderFold ? action.payload.split('/') : [null],
       }
     },
-
+    //切换小屏幕
     showNavbar (state) {
       return {
         ...state,
@@ -96,28 +86,41 @@ export default {
         isNavbar: false
       }
     },
+    //点击小屏幕菜单
     switchMenuPopver (state) {
       return {
         ...state,
-        menuPopoverVisible: !state.menuPopoverVisible
+        menuPopoverVisible: !state.menuPopoverVisible,
       }
     },
+    //改变菜单
     changeMenu(state, action){
+      console.log(action.payload);
       return {
         ...state,
-        menuOpenKeys: [action.payload[1]],
+        menuOpenKeys: state.siderFold ? action.payload : [action.payload[1]],
       }
     }
   },
   subscriptions: {
     setup({ dispatch, history }){
       window.onresize = () => dispatch({ type: 'changeNavbar' })
+      //监听路由转换，转换后切换菜单
       history.listen(({ pathname }) => {
-        dispatch({
-          type: 'changeMenu',
-          payload: pathname.split('/'),
-        })
+        //监听login路由
+        if (pathname==='/login') {
+          notification.error({ message: '出错', description: '请登录' });
+          dispatch({ type: 'logoutSuccess' });
+          history.push('/');
+        } else {
+          //路由改变时改变菜单的打开状态
+          dispatch({
+            type: 'changeMenu',
+            payload: localStorage.getItem('antdAdminSiderFold')==='true' ? [] : pathname.split('/'),
+          })
+        }
       })
+
     }
   },
 };
