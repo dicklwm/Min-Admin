@@ -51,14 +51,6 @@ function RouterConfig ({ history, app }) {
 
         makeRoute('home'),
 
-        makeRoute('inventory/matter', true),
-
-        makeRoute('inventory/entry', true),
-
-        makeRoute('workflow/definition'),
-
-        makeRoute('userManage/userList', true),
-
       ],
     },
   ];

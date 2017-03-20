@@ -1,23 +1,21 @@
 //导入logo图
-import logo from '../assets/Images/logo.png';
+import logo from '../assets/Images/Min.jpg';
 import login_bg from '../assets/Images/login_bg.jpg';
 
 module.exports = {
-  name: '竹石管理系统',
-  prefix: 'ZSAdmin',
-  footerText: 'Ant Design Admin 版权所有 © 2017 Made By ZS ',
+  name: 'Min-Admin',
+  footerText: 'Ant Design Admin 版权所有 © 2017 Made By Min ',
   logoSrc: logo,
-  logoText: '竹石管理系统',
+  logoText: 'Min-Admin',
   //登陆配置
   loginConfig: {
-    needLogin: true,
-    needCaptcha: true,
-    CaptchaAddress: "http://localhost:8000/zhushi/captcha.html",
+    needLogin: false, //是否需要登录模块
+    needCaptcha: false, //是否需要验证码
+    CaptchaAddress: "", //验证码地址
     needRegister: false, //是否需要注册按钮
-    logoBackground: login_bg,
+    logoBackground: login_bg, //logo的背景图
   },
   defaultSelectMenu: 'home',
   needBread: true,
   needFooter: true,
-  // v3Address:"http://www.mitarl.com:8080",
 }

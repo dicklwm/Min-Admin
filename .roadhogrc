@@ -1,17 +1,6 @@
 {
   "entry": "src/index.js",
-  "proxy": {
-    "/api": {
-      "target": "http://crm.zhushi/api/",
-      "changeOrigin": true,
-      "pathRewrite": { "^/api" : "" }
-    },
-    "/zhushi":{
-      "target": "http://crm.zhushi/",
-      "changeOrigin": true,
-      "pathRewrite": { "^/zhushi" : "" }
-    }
-  },
+  "proxy": {},
   "env": {
     "development": {
       "extraBabelPlugins": [

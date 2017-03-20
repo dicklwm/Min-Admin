@@ -1,28 +1,27 @@
 import * as appServices from '../services/app';
-// import config from '../utils/config';
+import config from '../utils/config';
 import { notification } from 'antd';
 
 export default {
   namespace: 'app',
   state: {
-    login: sessionStorage.getItem('login')==='true',
+    login: !config.loginConfig.needLogin || sessionStorage.getItem('login')==='true',
     menuPopoverVisible: false,
     siderFold: localStorage.getItem('antdAdminSiderFold')==='true',
     isNavbar: document.body.clientWidth < 769,
-    user: JSON.parse(sessionStorage.getItem('user')),
-    weixin: JSON.parse(sessionStorage.getItem('weixin')),
+    user: JSON.parse(sessionStorage.getItem('user')) || { nickname: 'guest' },
     menuOpenKeys: [],
   },
   effects: {
     *login ({ payload }, { call, put }) {
       const res = yield call(appServices.login, payload);
       const data = res.data;
+      //登录effect，登录请自定义
       if (data.errcode===0) {
         yield put({
           type: 'loginSuccess',
           payload: {
-            user: data.data.user,
-            weixin: data.data.weixin,
+            //登录成功后的put数据
           }
         })
       } else {
@@ -51,7 +50,6 @@ export default {
     loginSuccess (state, action) {
       window.sessionStorage.setItem('login', true);
       window.sessionStorage.setItem('user', JSON.stringify(action.payload.user));
-      window.sessionStorage.setItem('weixin', JSON.stringify(action.payload.weixin));
       return {
         ...state,
         ...action.payload,
@@ -61,7 +59,6 @@ export default {
     logoutSuccess (state) {
       window.sessionStorage.setItem('login', false);
       window.sessionStorage.removeItem('user');
-      window.sessionStorage.removeItem('weixin');
       return {
         ...state,
         login: false,
@@ -101,7 +98,7 @@ export default {
     changeMenu(state, action){
       return {
         ...state,
-        menuOpenKeys: state.siderFold ? action.payload : [action.payload[1]],
+        menuOpenKeys: action.payload,
       }
     }
   },

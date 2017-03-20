@@ -19,8 +19,10 @@ class Login extends React.Component {
       { validateFieldsAndScroll, setFieldsValue }=this.props.form;
     validateFieldsAndScroll((errors, values) => {
       if (errors) return;
-      setFieldsValue({ 'verify_code': '' });
-      that.changeVerify();
+      if (config.loginConfig.needCaptcha) {
+        setFieldsValue({ 'verify_code': '' });
+        that.changeVerify();
+      }
       this.props.onOk(values);
     });
   }
