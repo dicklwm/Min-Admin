@@ -1,6 +1,7 @@
 {
   "entry": "src/index.js",
   "proxy": {},
+  "publicPath": "/Min-Admin/",
   "env": {
     "development": {
       "extraBabelPlugins": [

@@ -5,6 +5,7 @@ import { parseParam } from '../utils/func';
 export async function login (params) {
   return request('/api/auth/login', {
     method: 'POST',
+    //跨域访问带Cookie
     credentials: 'same-origin',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: parseParam(params)

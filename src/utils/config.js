@@ -9,7 +9,7 @@ module.exports = {
   logoText: 'Min-Admin',
   //登陆配置
   loginConfig: {
-    needLogin: false, //是否需要登录模块
+    needLogin: true, //是否需要登录模块
     needCaptcha: false, //是否需要验证码
     CaptchaAddress: "", //验证码地址
     needRegister: false, //是否需要注册按钮

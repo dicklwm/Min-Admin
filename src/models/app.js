@@ -14,14 +14,16 @@ export default {
   },
   effects: {
     *login ({ payload }, { call, put }) {
-      const res = yield call(appServices.login, payload);
-      const data = res.data;
       //登录effect，登录请自定义
+      const res = yield call(appServices.login, payload);
+      console.log(res);
+      const data = res.data;
       if (data.errcode===0) {
         yield put({
           type: 'loginSuccess',
           payload: {
             //登录成功后的put数据
+            user: data.data.user,
           }
         })
       } else {
@@ -30,6 +32,7 @@ export default {
     },
 
     *logout ({}, { call, put }) {
+      //登出effect，请自定义接口
       const res = yield call(appServices.logout);
       if (res.data.errcode===0) {
         yield put({
