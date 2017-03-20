@@ -15,30 +15,32 @@ export default {
   effects: {
     *login ({ payload }, { call, put }) {
       //登录effect，登录请自定义
-      const res = yield call(appServices.login, payload);
-      console.log(res);
-      const data = res.data;
-      if (data.errcode===0) {
+      // const res = yield call(appServices.login, payload);
+      // console.log(res);
+      // const data = res.data;
+      // if (data.errcode===0) {
         yield put({
           type: 'loginSuccess',
           payload: {
             //登录成功后的put数据
-            user: data.data.user,
+            // user: data.data.user,
+            //登录展示
+            user:{nickname:payload.user_id},
           }
         })
-      } else {
-        notification.error({ message: '账号密码有误！', description: res.data.msg });
-      }
+      // } else {
+      //   notification.error({ message: '账号密码有误！', description: res.data.msg });
+      // }
     },
 
     *logout ({}, { call, put }) {
       //登出effect，请自定义接口
-      const res = yield call(appServices.logout);
-      if (res.data.errcode===0) {
+      // const res = yield call(appServices.logout);
+      // if (res.data.errcode===0) {
         yield put({
           type: 'logoutSuccess'
         })
-      }
+      // }
     },
 
     *changeNavbar ({}, { put }) {
